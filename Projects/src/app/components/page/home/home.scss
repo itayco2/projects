@@ -578,7 +578,9 @@ body {
     .subtitle-separator {
       display: none;
     }
+    
   }
+  
   
   .portfolio__grid {
     grid-template-columns: 1fr;
@@ -601,6 +603,21 @@ body {
     bottom: 0.5rem; // Adjusted for mobile
   }
 }
+@media (max-width: 768px) and (min-width: 481px) {
+  .scroll-indicator {
+    bottom: -2.95rem; // Positioned lower for tablet/large phone sizes
+    
+    .mouse {
+      width: 30px;
+      height: 48px;
+    }
+    
+    span {
+      font-size: 0.8rem;
+    }
+  }
+}
+
 
 @media (max-width: 480px) {
   .portfolio__label {
@@ -614,7 +631,7 @@ body {
   }
   
   .scroll-indicator {
-    bottom: 0.5rem; // Moved lower for mobile
+    bottom: -2.5rem; 
     
     .mouse {
       width: 28px;
