@@ -1,7 +1,7 @@
 [build]
-  base = "projects"
+  base = "Projects"
   command = "npx ng build --configuration production"
-  publish = "dist/projects/browser"
+  publish = "dist/Projects/browser"
 
 [[redirects]]
   from = "/*"
