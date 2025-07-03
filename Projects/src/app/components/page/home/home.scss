@@ -1,0 +1,643 @@
+// Modern color palette matching the gradient
+$bg-primary: #ffffff;
+$bg-secondary: #f8f9fa;
+$bg-card: rgba(255, 255, 255, 0.95);
+
+$text-primary: #1a1a1a;
+$text-secondary: #6b7280;
+$text-light: #9ca3af;
+
+// Gradient colors from the screenshot
+$accent-cyan: #00d4ff;
+$accent-purple: #c850c0;
+$accent-pink: #ff0080;
+$accent-yellow: #ffcc00;
+$accent-orange: #ff6b35;
+
+$gradient-primary: linear-gradient(135deg, $accent-cyan 0%, $accent-purple 50%, $accent-pink 100%);
+$gradient-secondary: linear-gradient(135deg, $accent-yellow 0%, $accent-orange 50%, $accent-pink 100%);
+$gradient-bg: linear-gradient(135deg, #e0f7ff 0%, #ffeef8 50%, #ffe0f0 100%);
+
+// Variables
+$border-radius: 16px;
+$transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+// Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// Base
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: $text-primary;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+// Portfolio container
+.portfolio {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: $gradient-bg;
+  
+  // Animated gradient background
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba($accent-cyan, 0.3) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba($accent-purple, 0.3) 0%, transparent 40%),
+      radial-gradient(circle at 50% 20%, rgba($accent-pink, 0.2) 0%, transparent 40%);
+    pointer-events: none;
+    animation: gradientShift 15s ease-in-out infinite;
+  }
+}
+
+// Floating orbs removed - using gradient background instead
+
+// Header section
+.portfolio__header {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.portfolio__hero {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.portfolio__label {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $accent-cyan;
+  padding: 0.625rem 1.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50px;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 15px rgba($accent-cyan, 0.3);
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.portfolio__title {
+  margin-bottom: 2rem;
+  
+  .title-line {
+    display: block;
+    overflow: visible;
+  }
+  
+  .title-word {
+    display: inline-block;
+    font-size: clamp(4rem, 10vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    position: relative;
+    color: #000000; // Changed to solid black for better visibility
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8); // Added white text shadow for contrast
+    
+    &:nth-child(1) {
+      animation: slideInLeft 0.8s ease-out 0.2s backwards;
+    }
+    
+    &:nth-child(2) {
+      margin-left: 0.2em;
+      animation: slideInRight 0.8s ease-out 0.4s backwards;
+    }
+  }
+}
+
+.portfolio__subtitle-wrapper {
+  margin-bottom: 2rem;
+}
+
+.portfolio__subtitle {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: $text-secondary;
+  animation: fadeInUp 0.8s ease-out 0.6s backwards;
+  
+  .subtitle-gradient {
+    background: $gradient-primary;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 500;
+  }
+  
+  .subtitle-separator {
+    color: $accent-yellow;
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+}
+
+.portfolio__disclaimer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: $text-secondary;
+  padding: 0.875rem 2rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.8s ease-out 0.8s backwards;
+  
+  .disclaimer-icon {
+    font-size: 1.25rem;
+    color: $accent-orange;
+  }
+}
+
+// Scroll indicator - moved lower
+.scroll-indicator {
+  position: absolute;
+  bottom: 1rem; // Changed from 3rem to 1rem
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: fadeInUp 0.8s ease-out 1s backwards;
+  
+  .mouse {
+    width: 32px;
+    height: 52px;
+    border: 3px solid rgba($accent-purple, 0.5);
+    border-radius: 20px;
+    position: relative;
+    
+    .wheel {
+      width: 6px;
+      height: 10px;
+      background: $gradient-primary;
+      border-radius: 3px;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: scroll 2s ease-in-out infinite;
+    }
+  }
+  
+  span {
+    font-size: 0.875rem;
+    color: $text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+  }
+}
+
+// Background text removed for cleaner look
+.bg-text {
+  display: none;
+}
+
+// Projects grid
+.portfolio__grid {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 2.5rem;
+  padding: 4rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+// Project cards
+.project-card {
+  position: relative;
+  background: $bg-card;
+  border-radius: $border-radius;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all $transition;
+  cursor: pointer;
+  
+  @for $i from 1 through 10 {
+    &[data-index="#{$i - 1}"] {
+      animation: cardFadeIn 0.6s ease-out #{$i * 0.15}s backwards;
+    }
+  }
+  
+  &__glow {
+    display: none; // Removed for cleaner look
+  }
+  
+  &:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba($accent-purple, 0.2);
+  }
+  
+  &__number {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 4rem;
+    font-weight: 900;
+    background: $gradient-primary;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.2;
+    z-index: 1;
+    font-family: -apple-system, sans-serif;
+  }
+  
+  &__image-wrapper {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  }
+  
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all $transition;
+  }
+  
+  &:hover &__image {
+    transform: scale(1.1);
+  }
+  
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba($accent-purple, 0.9) 0%, rgba($accent-pink, 0.9) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all $transition;
+  }
+  
+  &:hover &__overlay {
+    opacity: 1;
+  }
+  
+  &__main-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all $transition;
+    
+    &:hover {
+      background: white;
+      color: $accent-purple;
+      transform: scale(1.05);
+      
+      .link-arrow {
+        transform: translateX(4px);
+      }
+    }
+    
+    .link-bg {
+      display: none;
+    }
+    
+    .link-arrow {
+      transition: transform $transition;
+    }
+  }
+  
+  &__content {
+    padding: 2rem;
+  }
+  
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    gap: 1.5rem;
+  }
+  
+  &__title {
+    flex: 1;
+    
+    .title-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #000000; // Changed to black for better visibility
+      line-height: 1.2;
+      display: block;
+      transition: all $transition;
+    }
+    
+    .title-underline {
+      display: block;
+      height: 3px;
+      width: 0;
+      background: $gradient-primary;
+      margin-top: 0.5rem;
+      transition: width $transition;
+      border-radius: 2px;
+    }
+  }
+  
+  &:hover &__title {
+    .title-underline {
+      width: 60px;
+    }
+  }
+  
+  &__github {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba($accent-purple, 0.1);
+    transition: all $transition;
+    
+    svg {
+      width: 20px;
+      height: 20px;
+      color: $accent-purple;
+      transition: all $transition;
+    }
+    
+    &:hover {
+      background: $gradient-primary;
+      transform: rotate(360deg) scale(1.1);
+      
+      svg {
+        color: white;
+      }
+    }
+    
+    .github-bg {
+      display: none;
+    }
+  }
+  
+  &__description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: $text-secondary;
+    margin-bottom: 1.5rem;
+  }
+  
+  &__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  &__tech-tag {
+    position: relative;
+    background: rgba(255, 255, 255, 0.95); // Made more opaque for better contrast
+    border: 2px solid rgba(0, 0, 0, 0.3); // Made border more prominent
+    border-radius: 25px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 700; // Made even bolder
+    color: #000000; // Pure black for maximum visibility
+    text-shadow: none; // Removed any text shadow
+    transition: all $transition;
+    
+    &:hover {
+      background: $gradient-primary;
+      border-color: transparent;
+      color: white;
+      transform: translateY(-2px) scale(1.05);
+    }
+    
+    .tech-bg,
+    .tech-text {
+      color: #000000;
+    }
+  }
+}
+
+// Particles placeholder
+.particles {
+  display: none;
+}
+
+// Floating orbs
+.floating-orbs {
+  display: none;
+}
+
+// Animations
+@keyframes gradientShift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-20px, -20px) scale(1.1);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scroll {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(15px);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive design
+@media (max-width: 1024px) {
+  .portfolio__grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .portfolio__header {
+    min-height: 90vh;
+  }
+  
+  .portfolio__title {
+    .title-word {
+      font-size: clamp(3rem, 12vw, 5rem);
+      
+      &:nth-child(2) {
+        display: block;
+        margin-left: 0;
+        margin-top: 0.2em;
+      }
+    }
+  }
+  
+  .portfolio__subtitle {
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    .subtitle-separator {
+      display: none;
+    }
+  }
+  
+  .portfolio__grid {
+    grid-template-columns: 1fr;
+    padding: 3rem 1.5rem;
+  }
+  
+  .project-card {
+    &__number {
+      font-size: 3rem;
+      top: 1rem;
+      right: 1rem;
+    }
+    
+    &__content {
+      padding: 1.5rem;
+    }
+  }
+  
+  .scroll-indicator {
+    bottom: 0.5rem; // Adjusted for mobile
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio__label {
+    font-size: 0.75rem;
+    padding: 0.5rem 1.25rem;
+  }
+  
+  .portfolio__disclaimer {
+    font-size: 0.875rem;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .scroll-indicator {
+    bottom: 0.5rem; // Moved lower for mobile
+    
+    .mouse {
+      width: 28px;
+      height: 44px;
+    }
+    
+    span {
+      font-size: 0.75rem;
+    }
+  }
+  
+  .project-card {
+    &__image-wrapper {
+      height: 220px;
+    }
+    
+    &__title .title-text {
+      font-size: 1.25rem;
+    }
+    
+    &__main-link {
+      padding: 0.875rem 2rem;
+      font-size: 0.8rem;
+    }
+  }
+}
