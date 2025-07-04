@@ -50,7 +50,7 @@ export class HomeComponent {
     {
       id: 4,
       name: 'CaTetris',
-      description: 'Real-time messaging app with WebSocket integration',
+      description: 'A game of tetris that you can build your colonial map on it',
       image: 'assets/images/CaTetris.png',
       githubLink: 'https://github.com/itayco2/CataTetris',
       siteLink: 'https://catetris.netlify.app/',
