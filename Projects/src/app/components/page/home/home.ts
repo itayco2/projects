@@ -55,6 +55,26 @@ export class HomeComponent {
       githubLink: 'https://github.com/itayco2/CataTetris',
       siteLink: 'https://catetris.netlify.app/',
       technologies: ['React', 'Vite', 'TypeScript', 'Socket.io', 'Express']
-    }
+    },
+     {
+  id: 5,
+  name: "Take-Safe",
+  description: "A professional website for a client specializing in safes and security solutions. Features a cinematic safe intro animation, comprehensive SEO optimization with structured data, and a responsive, modern UI.",
+  image: "assets/images/TakeSafe.png",
+  githubLink: "https://github.com/itayco2/safelock",
+  siteLink: "https://safe-locks.netlify.app/",
+  technologies: [
+    "React",
+    "TypeScript",
+    "Vite",
+    "Tailwind CSS",
+    "Framer Motion",
+    "React Helmet",
+    "Lucide Icons",
+    "Session Storage (Browser API)",
+    "Schema.org JSON-LD (SEO Structured Data)"
+  ]
+}
+
   ];
 }
