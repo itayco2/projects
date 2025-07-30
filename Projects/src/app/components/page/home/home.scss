@@ -179,14 +179,17 @@ body {
 // Scroll indicator - moved lower
 .scroll-indicator {
   position: absolute;
-  bottom: 1rem; // Changed from 3rem to 1rem
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 1rem;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  animation: fadeInUp 0.8s ease-out 1s backwards;
+  animation: fadeInUp 0.8s ease-out 0.1s backwards;
+  will-change: transform; // Optimize for animations
   
   .mouse {
     width: 32px;
@@ -205,6 +208,8 @@ body {
       left: 50%;
       transform: translateX(-50%);
       animation: scroll 2s ease-in-out infinite;
+      will-change: transform, opacity; // Optimize for animations
+      transform-origin: center center;
     }
   }
   

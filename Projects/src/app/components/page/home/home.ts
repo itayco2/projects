@@ -74,6 +74,25 @@ export class HomeComponent {
     "Session Storage (Browser API)",
     "Schema.org JSON-LD (SEO Structured Data)"
   ]
+},
+{
+  id: 6,
+  name: "Elevator Management System",
+  description: "Real-time elevator simulation and management system for buildings. Features live elevator tracking, intelligent call allocation algorithm, and real-time updates using SignalR.",
+  image: "assets/images/advicepic.jpg",
+  githubLink: "https://github.com/itayco2/AdviceElectronics",
+  siteLink: "https://adviceassignment.netlify.app/",
+  technologies: [
+    "React",
+    "TypeScript",
+    "ASP.NET Core",
+    "SignalR",
+    "SQL Server",
+    "Entity Framework",
+    "Real-time Updates",
+    "Tailwind CSS",
+    "JWT Authentication"
+  ]
 }
 
   ];
