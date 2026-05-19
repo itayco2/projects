@@ -11,7 +11,7 @@ html, body {
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.35);
+  background: rgba(139, 92, 246, 0.4);
   color: #ffffff;
 }
 
@@ -23,10 +23,31 @@ html, body {
   background: #0a0a0f;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #8b5cf6, #06b6d4);
+  background: rgba(139, 92, 246, 0.55);
   border-radius: 10px;
   border: 2px solid #0a0a0f;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #a78bfa, #22d3ee);
+  background: rgba(139, 92, 246, 0.8);
+}
+
+/* Global focus ring — visible on keyboard nav, suppressed on mouse */
+:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+a, button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Reduced motion: respect system preference globally */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
