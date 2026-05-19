@@ -73,9 +73,11 @@
     <!-- Work -->
     <section id="work" class="section section--work">
       <header class="section__head">
-        <span class="section__eyebrow">selected work</span>
-        <h2 class="section__title">Things I've shipped.</h2>
-        <span class="section__count">{{ projects.length.toString().padStart(2, '0') }}</span>
+        <div class="section__head-left">
+          <span class="section__eyebrow">selected work</span>
+          <h2 class="section__title">Things I've shipped.</h2>
+        </div>
+        <span class="section__count">{{ projects.length.toString().padStart(2, '0') }} / {{ projects.length.toString().padStart(2, '0') }}</span>
       </header>
 
       <div class="portfolio__grid" #grid>
