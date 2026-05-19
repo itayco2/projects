@@ -40,12 +40,12 @@ export class HomeComponent {
     },
     {
       id: 3,
-      name: 'Job Interview AI',
-      description: 'AI-powered tool for job interview preparation',
-      image: 'assets/images/JobInterviewAI.png',
-      githubLink: 'https://github.com/itayco2/ChatGptProject',
-      siteLink: 'https://gptpromptitay.netlify.app/home',
-      technologies: ['Angular', 'ChatGpt', 'Prompt Engineering', 'TypeScript', 'API Calls']
+      name: 'Lian Gardens',
+      description: 'Professional landscaping site for a garden design & maintenance business — bilingual-ready, image-led marketing site with WhatsApp lead capture and Next.js image optimization.',
+      image: 'assets/images/LianGardens.png',
+      githubLink: 'https://github.com/itayco2/lian',
+      siteLink: 'https://liangardens.vercel.app/',
+      technologies: ['Next.js 15', 'React 19', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Phosphor Icons']
     },
     {
       id: 4,
@@ -79,7 +79,7 @@ export class HomeComponent {
   id: 6,
   name: "Elevator Management System",
   description: "Real-time elevator simulation and management system for buildings. Features live elevator tracking, intelligent call allocation algorithm, and real-time updates using SignalR.",
-  image: "assets/images/advicepic.jpg",
+  image: "assets/images/Elevator.png",
   githubLink: "https://github.com/itayco2/AdviceElectronics",
   siteLink: "https://adviceassignment.netlify.app/",
   technologies: [
