@@ -32,7 +32,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   readonly cvPath = 'assets/Itay-Cohen-CV.pdf';
 
   readonly location = 'Tel Aviv, Israel';
-  readonly availability = 'Available May 2026 onward';
   readonly lastShipped = 'Lian Gardens, March 2026';
 
   readonly coreStack = [
