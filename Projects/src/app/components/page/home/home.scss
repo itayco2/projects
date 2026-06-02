@@ -577,9 +577,6 @@ body {
 
   &.is-featured { grid-column: span 12; }
 
-  &:nth-child(5),
-  &:nth-child(6) { grid-column: span 6; }
-
   // Cursor spotlight
   &::before {
     content: '';

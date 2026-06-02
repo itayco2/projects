@@ -31,8 +31,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   readonly hasCv = false;
   readonly cvPath = 'assets/Itay-Cohen-CV.pdf';
 
-  readonly location = 'Tel Aviv, Israel';
-  readonly lastShipped = 'Lian Gardens, March 2026';
+  readonly lastShipped = 'DinoStudy, 2026';
 
   readonly coreStack = [
     'Angular', 'React', 'TypeScript', '.NET', 'Node', 'PostgreSQL', 'SignalR', 'Tailwind'
@@ -68,7 +67,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       year: 2024,
       role: 'Solo',
       scope: 'Full-stack',
-      description: 'Course management for students, lecturers, and admin — role-based access end to end, REST API, SQL persistence, deployed.',
+      description: 'Course management for students, lecturers, and admin — role-based access end to end, built on a REST API with SQL persistence.',
       image: 'assets/images/University.webp',
       githubLink: 'https://github.com/itayco2/FullStuckFinalProject',
       siteLink: 'https://universityprojectitay.netlify.app/home',
@@ -121,6 +120,18 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       githubLink: 'https://github.com/itayco2/AdviceElectronics',
       siteLink: 'https://adviceassignment.netlify.app/',
       technologies: ['React', 'ASP.NET Core', 'SignalR', 'SQL Server', 'EF Core', 'JWT']
+    },
+    {
+      id: 7,
+      name: 'DinoStudy',
+      year: 2026,
+      role: 'Solo',
+      scope: 'AI study coach',
+      description: 'Claude-powered study coach: an AI intake interview builds a personalized weekly plan, focus-timer sessions earn XP, and progress hatches collectible dinosaurs. Hand-illustrated "field journal" design.',
+      image: 'assets/images/DinoStudy.webp',
+      githubLink: 'https://github.com/itayco2/Elza',
+      siteLink: 'https://elzalearning.vercel.app/',
+      technologies: ['Next.js 15', 'React 19', 'TypeScript', 'Claude API', 'Prisma', 'Supabase', 'Tailwind', 'Framer Motion']
     }
   ];
 
