@@ -188,9 +188,14 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
           for (const entry of entries) {
             const v = entry.target as HTMLVideoElement;
             if (entry.isIntersecting) {
-              v.muted = true;
-              v.play().catch(() => { /* autoplay blocked: the poster stays */ });
+              // start on first sight; afterwards only resume what was playing when it scrolled away
+              if (v.dataset['seen'] !== '1' || v.dataset['wasPlaying'] === '1') {
+                v.dataset['seen'] = '1';
+                v.muted = true;
+                v.play().catch(() => { /* autoplay blocked: the poster and the controls stay */ });
+              }
             } else {
+              v.dataset['wasPlaying'] = v.paused ? '0' : '1';
               v.pause();
             }
           }
