@@ -122,21 +122,38 @@
           [class.is-featured]="project.featured"
           (pointermove)="onCardPointerMove($event, $any($event.currentTarget))"
         >
-          <div class="project-card__image-wrapper">
+          <div class="project-card__image-wrapper" [class.has-video]="!!project.video">
             <span class="project-card__number" aria-hidden="true">{{ (i + 1).toString().padStart(2, '0') }}</span>
             <span class="project-card__status" *ngIf="project.siteLink">
               <span class="status-dot" aria-hidden="true"></span>
               Live
             </span>
-            <img
-              [src]="project.image"
-              [alt]="'Screenshot of ' + project.name"
+            <video
+              *ngIf="project.video; else stillImage"
               class="project-card__image"
-              loading="lazy"
-              decoding="async"
+              [poster]="project.image"
+              [attr.aria-label]="'Film of ' + project.name"
+              [muted]="true"
+              loop
+              playsinline
+              preload="none"
+              data-autoplay
               width="800"
               height="500"
             >
+              <source [src]="project.video" type="video/mp4">
+            </video>
+            <ng-template #stillImage>
+              <img
+                [src]="project.image"
+                [alt]="'Screenshot of ' + project.name"
+                class="project-card__image"
+                loading="lazy"
+                decoding="async"
+                width="800"
+                height="500"
+              >
+            </ng-template>
             <div class="project-card__overlay">
               <a
                 *ngIf="project.siteLink"

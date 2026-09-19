@@ -9,6 +9,8 @@ interface Project {
   scope: string;
   description: string;
   image: string;
+  /** Optional film shown instead of the still; the still becomes its poster. */
+  video?: string;
   githubLink: string;
   siteLink?: string;
   technologies: string[];
@@ -31,7 +33,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   readonly hasCv = false;
   readonly cvPath = 'assets/Itay-Cohen-CV.pdf';
 
-  readonly lastShipped = 'DinoStudy, 2026';
+  readonly lastShipped = 'Driving RL, 2026';
 
   readonly coreStack = [
     'Angular', 'React', 'TypeScript', '.NET', 'Node', 'PostgreSQL', 'SignalR', 'Tailwind'
@@ -44,10 +46,24 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('grid') gridRef?: ElementRef<HTMLElement>;
   private observer?: IntersectionObserver;
+  private videoObserver?: IntersectionObserver;
 
   constructor(private zone: NgZone) {}
 
   projects: Project[] = [
+    {
+      id: 8,
+      name: 'Driving RL',
+      year: 2026,
+      role: 'Solo',
+      scope: 'Reinforcement learning',
+      description: 'A car that taught itself a 2.3 km stunt circuit with three water chasms and two big jumps. MuJoCo physics, PPO trained from scratch on a laptop: 0 laps to a 58.6 s record in 107 minutes. Every generation replayed and filmed in Three.js.',
+      image: 'assets/images/DrivingRL.webp',
+      video: 'assets/video/driving-rl.mp4',
+      githubLink: 'https://github.com/itayco2/driving-rl',
+      technologies: ['Python', 'MuJoCo', 'PPO', 'Stable-Baselines3', 'PyTorch', 'Three.js', 'Gymnasium'],
+      featured: true
+    },
     {
       id: 1,
       name: 'Workshop E-commerce & Recipes',
@@ -58,8 +74,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       image: 'assets/images/AdiSite.webp',
       githubLink: 'https://github.com/itayco2/AdiCohenFit',
       siteLink: 'https://adicohenfit.netlify.app/home',
-      technologies: ['Angular', 'C#', 'PostgreSQL', 'TypeScript', 'JWT', 'SendGrid', 'Bootstrap'],
-      featured: true
+      technologies: ['Angular', 'C#', 'PostgreSQL', 'TypeScript', 'JWT', 'SendGrid', 'Bootstrap']
     },
     {
       id: 2,
@@ -165,6 +180,23 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         }
       }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
       cards.forEach((c) => this.observer!.observe(c));
+
+      // Project films: preload nothing, play muted while the card is on screen, pause off it
+      const films = document.querySelectorAll<HTMLVideoElement>('video[data-autoplay]');
+      if (films.length) {
+        this.videoObserver = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            const v = entry.target as HTMLVideoElement;
+            if (entry.isIntersecting) {
+              v.muted = true;
+              v.play().catch(() => { /* autoplay blocked: the poster stays */ });
+            } else {
+              v.pause();
+            }
+          }
+        }, { threshold: 0.25 });
+        films.forEach((v) => this.videoObserver!.observe(v));
+      }
     });
   }
 
@@ -179,6 +211,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.observer?.disconnect();
+    this.videoObserver?.disconnect();
   }
 
   @HostListener('window:scroll')

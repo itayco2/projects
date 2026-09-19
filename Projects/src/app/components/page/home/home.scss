@@ -620,6 +620,12 @@ body {
     aspect-ratio: 21 / 9;
   }
 
+  // a film keeps its own frame so its HUD is never cropped
+  &.is-featured &__image-wrapper.has-video,
+  &__image-wrapper.has-video {
+    aspect-ratio: 16 / 9;
+  }
+
   &__image {
     width: 100%;
     height: 100%;
