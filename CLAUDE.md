@@ -24,7 +24,8 @@ This is an **Angular 20 standalone single-page portfolio site**. Despite the Ang
 
 - `src/main.ts` bootstraps **`HomeComponent` directly** (not an `AppComponent` shell with `<router-outlet>`). The router in `app.routes.ts`/`app.config.ts` is configured (redirect `""` → `/home`) but vestigial — adding real navigation requires bootstrapping a root component with a router outlet instead of `HomeComponent`.
 - All page content and behavior lives in `src/app/components/page/home/` (`home.ts`, `home.html`, `home.scss`). The portfolio's project list is hard-coded as the `projects: Project[]` array inside `home.ts` — edit that array to change displayed work, not any external data file.
-- `HomeComponent` handles its own scroll state, cookie-consent banner (localStorage key `cookie-consent`), `IntersectionObserver`-driven card reveals (run via `NgZone.runOutsideAngular` to avoid change-detection churn), and pointer-tracked card hover effects via CSS custom props (`--mx`/`--my`).
+- `HomeComponent` handles its own scroll state, cookie-consent banner (localStorage key `cookie-consent`), `IntersectionObserver`-driven reveals (`.reveal` → `.in-view`, run via `NgZone.runOutsideAngular`) and the project film (`video[data-autoplay]`: plays muted while on screen, pauses off it, never resumes a viewer's own pause).
+- Content is the résumé's: `facts` (the numbers strip), `experience` (timeline), `skills` (four groups) and `projects`. `featured` is the film project; `recent` (2026) renders as cards, `archive` (earlier) as the index table. Résumé-only projects with no public link are deliberately not listed.
 - Change detection uses zone.js with `provideZoneChangeDetection({ eventCoalescing: true })`.
 
 ### Conventions
@@ -34,9 +35,13 @@ This is an **Angular 20 standalone single-page portfolio site**. Despite the Ang
 - `.editorconfig`: 2-space indent, single quotes in `.ts`, final newline. Prettier formats `.html` with the Angular parser.
 - Static assets (images, favicon) live in `Projects/public/` and are copied to the build root; reference them as `assets/...` in code.
 
+### Design (2026-09, "paper editorial")
+
+Warm paper ground `#f7f5f0`, ink `#1a1917`, one accent `#2447d4` (lifted to `#9fb3ff` on the dark contact band), hairlines `#e3dfd6`. Type: Instrument Serif for display and big numerals, Geist for body, Geist Mono for meta labels. Sections are numbered and open with a 2 px rule. No glow, grain or hover tilt. The global ground lives in `src/styles.scss` because Angular scopes component styles: a `body` rule inside `home.scss` never matches.
+
 ### Build budget gotcha
 
-`angular.json` enforces a per-component style budget: **warning at 30 kB, error at 40 kB**. `home.scss` is already ~28 kB, so the **production build will fail if it grows past 40 kB**. Keep an eye on its size when adding styles (this constraint has already broken Netlify prod builds before).
+`angular.json` enforces a per-component style budget: **warning at 30 kB, error at 40 kB**. `home.scss` is ~16 kB after the 2026-09 redesign, so there is room, but the **production build fails past 40 kB** (this has broken Netlify prod builds before).
 
 ## Deployment
 

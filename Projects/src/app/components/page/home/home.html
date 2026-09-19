@@ -1,266 +1,253 @@
 <a class="skip-link" href="#work">Skip to projects</a>
 
-<div class="portfolio" [class.is-scrolled]="isScrolled">
+<div class="portfolio">
   <!-- Sticky nav -->
-  <nav class="nav" [class.is-scrolled]="isScrolled" [class.past-hero]="pastHero" aria-label="Primary">
+  <nav class="nav" [class.is-scrolled]="isScrolled" aria-label="Primary">
     <a href="#top" class="nav__brand" (click)="scrollTo('top', $event)">
-      <span class="nav__brand-mark" aria-hidden="true">IC</span>
-      <span class="nav__brand-name">Itay Cohen</span>
+      <span class="nav__mark" aria-hidden="true">IC</span>
+      <span class="nav__name">Itay Cohen</span>
     </a>
-    <ul class="nav__links">
-      <li><a href="#work" (click)="scrollTo('work', $event)">Work</a></li>
-      <li><a href="#about" (click)="scrollTo('about', $event)">About</a></li>
-      <li><a href="#contact" (click)="scrollTo('contact', $event)">Contact</a></li>
-    </ul>
-    <div class="nav__actions">
-      <a *ngIf="hasCv" class="nav__cv" [href]="cvPath" target="_blank" rel="noopener" download>
-        <span>Download CV</span>
-        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 4v12m-5-5 5 5 5-5M5 20h14"/>
-        </svg>
+    <div class="nav__links">
+      <a href="#work" (click)="scrollTo('work', $event)">Work</a>
+      <a href="#experience" (click)="scrollTo('experience', $event)">Experience</a>
+      <a href="#about" (click)="scrollTo('about', $event)">About</a>
+      <a *ngIf="hasCv" class="btn btn--outline btn--small" [href]="cvPath" target="_blank" rel="noopener" download>
+        <span>CV</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 4v12m-5-5 5 5 5-5M5 20h14"/></svg>
       </a>
-      <a class="nav__cta" [href]="'mailto:' + email">
+      <a class="btn btn--outline btn--small" [href]="'mailto:' + email">
         <span>Email</span>
-        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/>
-        </svg>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
       </a>
     </div>
   </nav>
 
   <main id="top">
     <!-- Hero -->
-    <header class="portfolio__header">
-      <div class="portfolio__hero">
-        <p class="portfolio__eyebrow" aria-label="Status, experience">
-          <span class="portfolio__dot" aria-hidden="true"></span>
-          <span>Available</span>
-          <span class="sep" aria-hidden="true">·</span>
-          <span>2 yrs shipping</span>
+    <header class="hero">
+      <div class="hero__copy">
+        <p class="eyebrow">
+          <span class="eyebrow__dot" aria-hidden="true"></span>
+          <span>Available · AI Engineer · Full-Stack Developer</span>
         </p>
-        <h1 class="portfolio__title">
-          <span class="title-mask"><span class="title-inner">Itay Cohen<span class="title-period">.</span></span></span>
-        </h1>
-        <p class="portfolio__lede">
-          Full-stack engineer shipping production web apps in
-          <span class="lede-accent">Angular, React, and .NET</span>.
+        <h1 class="hero__title">I ship production <em>LLM systems</em> and full-stack platforms.</h1>
+        <p class="hero__lede">
+          From research to deployment: agentic LLM pipelines, evaluation harnesses and the platforms around them.
+          Two-plus years shipping, currently Full-Stack / AI Engineer at Prism AI.
         </p>
-        <div class="portfolio__cta-row">
-          <a class="btn btn--primary" href="#work" (click)="scrollTo('work', $event)">
+        <div class="hero__actions">
+          <a class="btn btn--solid" href="#work" (click)="scrollTo('work', $event)">
             <span>View work</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14m-6-6 6 6 6-6"/>
-            </svg>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14m-6-6 6 6 6-6"/></svg>
           </a>
-          <a *ngIf="hasCv" class="btn btn--ghost" [href]="cvPath" target="_blank" rel="noopener" download>
-            <span>Download CV</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 4v12m-5-5 5 5 5-5M5 20h14"/>
-            </svg>
-          </a>
-          <a class="btn btn--ghost" [href]="'mailto:' + email">
-            <span>{{ email }}</span>
-          </a>
+          <a class="btn btn--text" [href]="'mailto:' + email">{{ email }}</a>
         </div>
       </div>
+
+      <a *ngIf="featured as f" class="hero__visual" href="#work" (click)="scrollTo('work', $event)" [attr.aria-label]="'Jump to ' + f.name">
+        <span class="frame frame--rounded">
+          <img [src]="f.image" alt="" width="1280" height="720" decoding="async">
+          <span class="frame__badge" *ngIf="f.videoLabel">
+            <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+            <span>{{ f.videoLabel }}</span>
+          </span>
+        </span>
+        <span class="hero__caption">
+          <span>Latest &mdash; {{ f.name }}</span>
+          <span>{{ f.tagline }}</span>
+        </span>
+      </a>
     </header>
 
-    <!-- About -->
-    <section id="about" class="section section--about">
-      <header class="section__head">
-        <div class="section__head-left">
-          <span class="section__eyebrow">about</span>
-          <h2 class="section__title">A short introduction.</h2>
-        </div>
-        <span class="section__count" aria-hidden="true">01</span>
-      </header>
-
-      <div class="about__grid">
-        <aside class="about__card">
-          <span class="about__card-mark" aria-hidden="true">IC</span>
-          <dl class="about__meta">
-            <div>
-              <dt>Last shipped</dt>
-              <dd>{{ lastShipped }}</dd>
-            </div>
-          </dl>
-        </aside>
-
-        <div class="about__body">
-          <p>
-            <strong>I build web apps end to end</strong> — from the database schema to the last hover state. Most of my work lives at the intersection of Angular or React on the front, and .NET or Node on the back, with PostgreSQL or SQL Server underneath.
-          </p>
-          <p>
-            <strong>I optimise for shipped, not clever.</strong> The six projects below were built solo, deployed, and are running in production today. They cover e-commerce with real payments, real-time multiplayer over SignalR and Socket.io, role-based course management, and marketing sites that capture leads.
-          </p>
-          <p>
-            <strong>What I'm looking for:</strong> a team that takes craft seriously and ships often. Open to full-time or contract, remote-first, ideally on a product where the front-end has weight.
-          </p>
-
-          <div class="about__chips" aria-label="Core stack">
-            <span class="project-card__tech-tag" *ngFor="let item of coreStack">{{ item }}</span>
-          </div>
-        </div>
+    <!-- In numbers -->
+    <section class="facts" aria-label="In numbers">
+      <div class="facts__item" *ngFor="let fact of facts">
+        <span class="facts__value">{{ fact.value }}</span>
+        <span class="facts__label">{{ fact.label }}</span>
       </div>
     </section>
 
     <!-- Work -->
-    <section id="work" class="section section--work">
+    <section id="work" class="section">
       <header class="section__head">
-        <div class="section__head-left">
-          <span class="section__eyebrow">work</span>
-          <h2 class="section__title">Selected work, 2024&ndash;2026.</h2>
-        </div>
-        <span class="section__count" aria-hidden="true">02</span>
+        <h2 class="section__title"><span class="section__num">01</span>Selected work</h2>
+        <p class="section__meta">2024 &ndash; 2026 &middot; {{ projects.length }} projects, all solo</p>
       </header>
 
-      <div class="portfolio__grid" #grid>
-        <article
-          class="project-card"
-          *ngFor="let project of projects; let i = index"
-          [attr.data-index]="i"
-          [class.is-featured]="project.featured"
-          (pointermove)="onCardPointerMove($event, $any($event.currentTarget))"
-        >
-          <div class="project-card__image-wrapper" [class.has-video]="!!project.video">
-            <span class="project-card__number" aria-hidden="true">{{ (i + 1).toString().padStart(2, '0') }}</span>
-            <span class="project-card__status" *ngIf="project.siteLink">
-              <span class="status-dot" aria-hidden="true"></span>
-              Live
-            </span>
-            <video
-              *ngIf="project.video; else stillImage"
-              class="project-card__image"
-              [poster]="project.image"
-              [attr.aria-label]="'Film of ' + project.name"
-              [muted]="true"
-              controls
-              loop
-              playsinline
-              preload="none"
-              data-autoplay
-              width="800"
-              height="500"
-            >
-              <source [src]="project.video" type="video/mp4">
-            </video>
-            <ng-template #stillImage>
-              <img
-                [src]="project.image"
-                [alt]="'Screenshot of ' + project.name"
-                class="project-card__image"
-                loading="lazy"
-                decoding="async"
-                width="800"
-                height="500"
-              >
-            </ng-template>
-            <div class="project-card__overlay">
-              <a
-                *ngIf="project.siteLink"
-                [href]="project.siteLink"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="project-card__main-link"
-                [attr.aria-label]="'Open ' + project.name + ' in a new tab'"
-              >
-                <span class="link-text">Visit live</span>
-                <svg class="link-arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                  <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/>
-                </svg>
-              </a>
+      <article class="featured reveal" *ngIf="featured as f">
+        <div class="featured__media frame frame--rounded">
+          <video
+            *ngIf="f.video; else featuredStill"
+            [poster]="f.image"
+            [attr.aria-label]="'Film of ' + f.name"
+            [muted]="true"
+            controls
+            loop
+            playsinline
+            preload="none"
+            data-autoplay
+            width="1280"
+            height="720"
+          >
+            <source [src]="f.video" type="video/mp4">
+          </video>
+          <ng-template #featuredStill>
+            <img [src]="f.image" [alt]="'Screenshot of ' + f.name" width="1280" height="720" loading="lazy" decoding="async">
+          </ng-template>
+        </div>
+        <div class="featured__body">
+          <p class="featured__label">{{ numberOf(f) }} &middot; {{ f.year }} &middot; {{ f.scope }}</p>
+          <h3 class="featured__title">{{ f.name }}</h3>
+          <p class="featured__desc">{{ f.description }}</p>
+          <dl class="stats" *ngIf="f.facts">
+            <div *ngFor="let fact of f.facts">
+              <dt>{{ fact.label }}</dt>
+              <dd>{{ fact.value }}</dd>
             </div>
+          </dl>
+          <p class="tags">{{ techLine(f) }}</p>
+          <div class="links">
+            <a *ngIf="f.siteLink" class="link" [href]="f.siteLink" target="_blank" rel="noopener noreferrer">
+              <span>Live</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
+            <a class="link" [href]="f.githubLink" target="_blank" rel="noopener noreferrer">
+              <span>Code</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
           </div>
+        </div>
+      </article>
 
-          <div class="project-card__content">
-            <p class="project-card__meta" aria-hidden="true">
-              <span>{{ project.year }}</span>
-              <span class="sep">·</span>
-              <span>{{ project.role }}</span>
-              <span class="sep">·</span>
-              <span>{{ project.scope }}</span>
-            </p>
+      <div class="cards">
+        <article class="card reveal" *ngFor="let project of recent">
+          <a class="card__media frame frame--rounded" [href]="project.siteLink || project.githubLink" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Open ' + project.name">
+            <img [src]="project.image" [alt]="'Screenshot of ' + project.name" width="800" height="500" loading="lazy" decoding="async">
+            <span class="frame__live" *ngIf="project.siteLink"><span class="eyebrow__dot" aria-hidden="true"></span>Live</span>
+          </a>
+          <p class="card__meta">{{ numberOf(project) }} &middot; {{ project.year }} &middot; {{ project.scope }}</p>
+          <h3 class="card__title">{{ project.name }}</h3>
+          <p class="card__desc">{{ project.description }}</p>
+          <p class="tags">{{ techLine(project) }}</p>
+          <div class="links">
+            <a *ngIf="project.siteLink" class="link" [href]="project.siteLink" target="_blank" rel="noopener noreferrer">
+              <span>Live</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
+            <a class="link link--quiet" [href]="project.githubLink" target="_blank" rel="noopener noreferrer">
+              <span>Code</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
+          </div>
+        </article>
+      </div>
 
-            <div class="project-card__header">
-              <h3 class="project-card__title">{{ project.name }}</h3>
-              <a
-                [href]="project.githubLink"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="project-card__github"
-                [attr.aria-label]="'View ' + project.name + ' source on GitHub'"
-              >
-                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                  <path fill="currentColor" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-              </a>
-            </div>
-
-            <p class="project-card__description">{{ project.description }}</p>
-
-            <div class="project-card__footer">
-              <div class="project-card__tech">
-                <span class="project-card__tech-tag" *ngFor="let tech of visibleTechs(project)">{{ tech }}</span>
-                <span class="project-card__tech-tag is-more" *ngIf="hiddenTechCount(project) > 0">
-                  +{{ hiddenTechCount(project) }}
-                </span>
-              </div>
-            </div>
+      <div class="index">
+        <p class="index__label">More work, 2024 &ndash; 2025</p>
+        <article class="row reveal" *ngFor="let project of archive">
+          <span class="row__num">{{ numberOf(project) }}</span>
+          <a class="row__media" [href]="project.siteLink || project.githubLink" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Open ' + project.name">
+            <img [src]="project.image" alt="" width="160" height="100" loading="lazy" decoding="async">
+          </a>
+          <div class="row__title">
+            <h3>{{ project.name }}</h3>
+            <span class="row__meta">{{ project.year }} &middot; {{ project.scope }}</span>
+          </div>
+          <p class="row__desc">{{ project.description }}</p>
+          <p class="row__tags tags">{{ techLine(project) }}</p>
+          <div class="row__links links">
+            <a *ngIf="project.siteLink" class="link" [href]="project.siteLink" target="_blank" rel="noopener noreferrer">
+              <span>Live</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
+            <a class="link link--quiet" [href]="project.githubLink" target="_blank" rel="noopener noreferrer">
+              <span>Code</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact" class="section section--contact">
+    <!-- Experience -->
+    <section id="experience" class="section">
       <header class="section__head">
-        <div class="section__head-left">
-          <span class="section__eyebrow">contact</span>
-          <h2 class="section__title">Let&rsquo;s work together.</h2>
-        </div>
-        <span class="section__count" aria-hidden="true">03</span>
+        <h2 class="section__title"><span class="section__num">02</span>Experience</h2>
+        <p class="section__meta">Research to deployment, 2021 &ndash; present</p>
       </header>
+      <div class="timeline">
+        <article class="timeline__item reveal" *ngFor="let job of experience">
+          <span class="timeline__period">{{ job.period }}</span>
+          <div class="timeline__org">
+            <span class="timeline__name">{{ job.org }}</span>
+            <span class="timeline__role">{{ job.role }}</span>
+          </div>
+          <div class="timeline__body">
+            <ul><li *ngFor="let point of job.bullets">{{ point }}</li></ul>
+            <p class="tags" *ngIf="job.tools">{{ job.tools }}</p>
+          </div>
+        </article>
+      </div>
+    </section>
 
-      <p class="contact__lede">
-        Full-time, contract, or interesting one-offs. Easiest to reach by email.
-      </p>
+    <!-- Stack -->
+    <section id="stack" class="section section--split">
+      <div class="section__side">
+        <h2 class="section__title"><span class="section__num">03</span>Stack</h2>
+        <p class="section__lede">Grouped the way the work is: the models and the orchestration around them, then the languages, the backends and the pipeline that keeps it all green.</p>
+      </div>
+      <dl class="skills">
+        <div class="skills__group reveal" *ngFor="let group of skills">
+          <dt>{{ group.label }}</dt>
+          <dd>{{ group.items }}</dd>
+        </div>
+      </dl>
+    </section>
 
-      <ul class="contact__list">
-        <li>
-          <a class="contact__link contact__link--primary" [href]="'mailto:' + email">
-            <span class="contact__link-label">Email</span>
-            <span class="contact__link-value">{{ email }}</span>
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/>
-            </svg>
-          </a>
-        </li>
-        <li>
-          <a class="contact__link" [href]="github" target="_blank" rel="noopener noreferrer">
-            <span class="contact__link-label">GitHub</span>
-            <span class="contact__link-value">github.com/itayco2</span>
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/>
-            </svg>
-          </a>
-        </li>
-        <li *ngIf="hasCv">
-          <a class="contact__link" [href]="cvPath" target="_blank" rel="noopener" download>
-            <span class="contact__link-label">Resume</span>
-            <span class="contact__link-value">Download CV (PDF)</span>
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 4v12m-5-5 5 5 5-5M5 20h14"/>
-            </svg>
-          </a>
-        </li>
-      </ul>
+    <!-- About -->
+    <section id="about" class="section section--split">
+      <div class="section__side">
+        <h2 class="section__title"><span class="section__num">04</span>About</h2>
+      </div>
+      <div class="about__body">
+        <p>Two-plus years shipping production LLM systems and full-stack platforms, from research to deployment. Before software: IDF combat medic from 2021 to 2024, leading 12 soldiers under live pressure.</p>
+        <p>Full-Stack Developer Diploma at John Bryce, 2024 to 2025, GPA 100. Hebrew native, English fluent.</p>
+        <p>Looking for a team that takes craft seriously and ships often. Full-time or contract, remote-first, ideally where AI systems meet real products.</p>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="contact">
+      <div class="contact__copy">
+        <p class="eyebrow eyebrow--dark"><span>Contact</span></p>
+        <h2 class="contact__title">Let&rsquo;s work <em>together.</em></h2>
+        <p class="contact__lede">Full-time, contract, or interesting one-offs. Easiest to reach by email.</p>
+      </div>
+      <div class="contact__links">
+        <a class="btn btn--paper" [href]="'mailto:' + email">
+          <span>{{ email }}</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <a class="btn btn--ghost" [href]="linkedin" target="_blank" rel="noopener noreferrer">
+          <span>LinkedIn</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <a class="btn btn--ghost" [href]="github" target="_blank" rel="noopener noreferrer">
+          <span>github.com/itayco2</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <a *ngIf="hasCv" class="btn btn--ghost" [href]="cvPath" target="_blank" rel="noopener" download>
+          <span>Download CV</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 4v12m-5-5 5 5 5-5M5 20h14"/></svg>
+        </a>
+      </div>
     </section>
   </main>
 
   <footer class="footer">
-    <span class="footer__copy">&copy; 2026 Itay Cohen</span>
-    <span class="footer__mono">Last shipped &middot; {{ lastShipped }}</span>
-    <span class="footer__mono footer__mono--end">Built with Angular &middot; Designed in the dark</span>
+    <span>&copy; 2026 Itay Cohen</span>
+    <span>Last shipped &middot; {{ lastShipped }}</span>
+    <span>Built with Angular</span>
   </footer>
 
   <!-- Cookie consent (Israeli & EU privacy compliance) -->
@@ -279,12 +266,8 @@
       </p>
     </div>
     <div class="cookie-banner__actions">
-      <button type="button" class="cookie-banner__btn cookie-banner__btn--ghost" (click)="setCookieConsent(false)">
-        Decline
-      </button>
-      <button type="button" class="cookie-banner__btn cookie-banner__btn--primary" (click)="setCookieConsent(true)">
-        Accept
-      </button>
+      <button type="button" class="cookie-banner__btn" (click)="setCookieConsent(false)">Decline</button>
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--primary" (click)="setCookieConsent(true)">Accept</button>
     </div>
   </div>
 </div>
