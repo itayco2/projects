@@ -1,41 +1,52 @@
-import { AfterViewInit, Component, HostListener, NgZone, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-interface Fact {
+interface Stat {
   value: string;
   label: string;
+  /** Where the number was measured. */
+  source?: string;
 }
+
+interface Detail {
+  label: string;
+  text: string;
+}
+
+interface ProjectLink {
+  label: string;
+  url: string;
+  primary?: boolean;
+}
+
+type Media = 'film' | 'chart' | 'alert' | 'still';
 
 interface Project {
-  id: number;
+  id: string;
   name: string;
-  year: number;
-  role: string;
-  scope: string;
-  description: string;
-  image: string;
-  /** Optional film shown instead of the still; the still becomes its poster. */
+  area: string;
+  /** The headline: what it is, in one line. */
+  claim: string;
+  /** Why it earns its place on an AI-engineer portfolio. */
+  why: string;
+  stat: Stat;
+  stack: string;
+  media: Media;
+  image?: string;
+  imageAlt?: string;
   video?: string;
   videoLabel?: string;
-  tagline?: string;
-  githubLink: string;
-  siteLink?: string;
-  technologies: string[];
-  featured?: boolean;
-  facts?: Fact[];
+  links: ProjectLink[];
+  live?: boolean;
+  note?: string;
+  /** "How it works": three short lines, hidden until asked for. */
+  details?: Detail[];
 }
 
-interface Experience {
-  org: string;
-  role: string;
-  period: string;
-  bullets: string[];
-  tools?: string;
-}
-
-interface SkillGroup {
+interface TokenBar {
   label: string;
-  items: string;
+  value: number;
+  lean?: boolean;
 }
 
 @Component({
@@ -49,67 +60,110 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   readonly email = 'itay.cohen2907@gmail.com';
   readonly github = 'https://github.com/itayco2';
   readonly linkedin = 'https://www.linkedin.com/in/itay-cohen-941552349/';
-  readonly visibleTagLimit = 5;
 
   // CV download — set to true after dropping the PDF at public/assets/Itay-Cohen-CV.pdf
   readonly hasCv = false;
   readonly cvPath = 'assets/Itay-Cohen-CV.pdf';
 
-  readonly lastShipped = 'Driving RL, 2026';
+  // Photo beside the name — set to true after dropping it at public/assets/images/portrait.webp
+  readonly hasPortrait = false;
+  readonly portraitPath = 'assets/images/portrait.webp';
 
-  /** The résumé's numbers, verbatim. */
-  readonly facts: Fact[] = [
-    { value: '2+ yrs', label: 'production LLM systems' },
-    { value: '1,121', label: 'backend tests kept green' },
-    { value: '235', label: 'Playwright E2E cases' },
-    { value: '58.6 s', label: 'record lap, Driving RL' },
-    { value: '100', label: 'GPA, John Bryce diploma' }
-  ];
-
-  readonly experience: Experience[] = [
+  /**
+   * Each project is here for one thing it proves to an AI-engineer hiring
+   * manager. One line, one number with its source, and the rest behind
+   * "How it works". A project that proves nothing the others don't stays off.
+   */
+  readonly projects: Project[] = [
     {
-      org: 'Prism AI',
-      role: 'Full-Stack / AI Engineer',
-      period: '2026 – present',
-      bullets: [
-        'Co-owned the architecture of an agentic LLM pipeline: debate, ranking and invocation layers.',
-        'Built the semantic grounding layer that anchors LLM output to source-of-truth data, cutting hallucinations.',
-        'Maintain 1,121 backend tests and 235 Playwright E2E cases in containerized CI; rebuilt a cache that was silently dropping verified AI results.'
-      ],
-      tools: 'xUnit · Vitest · Playwright · GitHub Actions · Google Cloud Run'
+      id: 'driving-rl',
+      name: 'Driving RL',
+      area: 'Reinforcement learning',
+      claim: 'A car that taught itself a stunt circuit.',
+      why: 'I can train a model, not just call one.',
+      stat: {
+        value: '58.6 s',
+        label: 'record lap, 107 min of training on a laptop',
+        source: 'https://github.com/itayco2/driving-rl#the-numbers-run-3-the-canonical-run'
+      },
+      stack: 'PyTorch · MuJoCo · PPO · Three.js',
+      media: 'film',
+      image: 'assets/images/DrivingRL.webp',
+      imageAlt: 'The trained car mid-lap on the stunt circuit',
+      video: 'assets/video/driving-rl.mp4',
+      videoLabel: 'Film of the trained car lapping the stunt circuit',
+      links: [{ label: 'Code', url: 'https://github.com/itayco2/driving-rl' }],
+      details: [
+        { label: 'Problem', text: 'Lap a 2.3 km circuit with two jumps and three water chasms. No GPU, no demonstrations.' },
+        { label: 'Built', text: 'A MuJoCo world and Gymnasium environment, trained with PPO. Every generation filmed in Three.js.' },
+        { label: 'Result', text: 'The first run made zero laps. I found and fixed 20 defects; the rebuilt run set a 58.6 s record.' }
+      ]
     },
     {
-      org: 'Absolutions',
-      role: 'Full-Stack / AI Engineer',
-      period: '2025 – 2026',
-      bullets: [
-        'Owned the full-stack architecture of an employee management platform across web and mobile: REST APIs, schema, authentication and security.',
-        'Integrated AI image-based data extraction into the platform\'s internal data workflows.'
-      ],
-      tools: 'Angular · .NET · REST APIs · SQL Server'
+      id: 'lean-swarm',
+      name: 'Lean-Swarm',
+      area: 'Agents & evals',
+      claim: 'Agent runs that read 83% fewer tokens and miss no bugs.',
+      why: 'I measure agent systems and cut their cost without losing quality.',
+      stat: {
+        value: '11 / 11',
+        label: 'subtle bugs found, 0 of 15 decoys flagged',
+        source: 'https://github.com/itayco2/Token-Optimizer#proof'
+      },
+      stack: 'Claude Code · Multi-agent · Evals · Node.js',
+      media: 'chart',
+      links: [{ label: 'Code', url: 'https://github.com/itayco2/Token-Optimizer' }],
+      details: [
+        { label: 'Problem', text: 'Across 2,121 agents, 43% of 8.08B tokens read was each agent’s fixed start: tools it never used.' },
+        { label: 'Built', text: 'X-ray, a CLI that reads Claude Code logs, and five lean agent roles, shipped as a plugin.' },
+        { label: 'Result', text: '−83% tokens read on a 7-agent review, same bugs found. The cost: runs 12–16% slower.' }
+      ]
     },
     {
-      org: 'IDF',
-      role: 'Combat medic',
-      period: '2021 – 2024',
-      bullets: ['Led 12 soldiers under live pressure.']
+      id: 'apartmentbot',
+      name: 'ApartmentBot',
+      area: 'LLM in production',
+      claim: 'Every Israeli rental site in one Telegram alert.',
+      why: 'I run LLMs in production, on messy input and a budget.',
+      stat: {
+        value: '2,900 → <100',
+        label: 'LLM calls a day',
+        source: 'https://github.com/itayco2/ApartmentBot'
+      },
+      stack: 'TypeScript · Gemini · Zod · 443 tests',
+      media: 'alert',
+      links: [{ label: 'Code', url: 'https://github.com/itayco2/ApartmentBot' }],
+      details: [
+        { label: 'Problem', text: 'Listings are spread over five sites and free-text Hebrew posts in Telegram and Facebook groups.' },
+        { label: 'Built', text: 'Hand-written parsers, Gemini output validated with Zod, cross-site dedupe, Telegram alerts.' },
+        { label: 'Result', text: '1,178 cities. Ten posts per model call keeps it under 100 calls a day, inside the free tier.' }
+      ]
     },
     {
-      org: 'John Bryce',
-      role: 'Full-Stack Developer Diploma, GPA 100',
-      period: '2024 – 2025',
-      bullets: ['JavaScript, TypeScript, Angular, React, C#, .NET Core, SQL Server.']
+      id: 'dinostudy',
+      name: 'DinoStudy',
+      area: 'LLM product',
+      claim: 'A Claude study coach that plans your week.',
+      why: 'it’s the one you can use right now, built end to end.',
+      stat: { value: 'Live', label: 'elzalearning.vercel.app' },
+      stack: 'Next.js · Claude API · Prisma · Supabase',
+      media: 'still',
+      image: 'assets/images/DinoStudy.webp',
+      imageAlt: 'DinoStudy landing page, hand-illustrated like a field journal',
+      links: [{ label: 'Open it', url: 'https://elzalearning.vercel.app/', primary: true }],
+      live: true,
+      note: 'code private'
     }
   ];
 
-  readonly skills: SkillGroup[] = [
-    { label: 'AI & LLM', items: 'Claude API, OpenAI GPT, multi-agent orchestration, RAG, vision models, structured outputs (Zod)' },
-    { label: 'Languages & frontend', items: 'TypeScript, C#, Python, Angular, React, Next.js, React Native, Tailwind' },
-    { label: 'Backend & data', items: 'NestJS, .NET 9, ASP.NET Core, REST APIs, WebSockets, PostgreSQL (pgvector), Prisma, SQL Server' },
-    { label: 'DevOps, cloud & testing', items: 'Git, GitHub Actions CI/CD, Docker, Google Cloud Run, AWS S3, xUnit, Vitest, Playwright' }
+  /** Lean-Swarm, round 1: tokens read per run, in thousands. */
+  readonly tokenBars: TokenBar[] = [
+    { label: 'default', value: 813.6 },
+    { label: 'lean', value: 140.1, lean: true }
   ];
 
-  isScrolled = false;
+  readonly open = new Set<string>();
+
   showCookieBanner = false;
   private readonly cookieKey = 'cookie-consent';
 
@@ -118,134 +172,18 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   constructor(private zone: NgZone) {}
 
-  projects: Project[] = [
-    {
-      id: 8,
-      name: 'Driving RL',
-      year: 2026,
-      role: 'Solo',
-      scope: 'Reinforcement learning',
-      description: 'A car that taught itself a 2.3 km stunt circuit with three water chasms and two big jumps. MuJoCo physics and PPO, trained from scratch on a laptop. Every generation replayed and filmed in Three.js.',
-      image: 'assets/images/DrivingRL.webp',
-      video: 'assets/video/driving-rl.mp4',
-      videoLabel: 'Watch the lap · 1:03',
-      tagline: 'MuJoCo + PPO · 58.6 s record',
-      githubLink: 'https://github.com/itayco2/driving-rl',
-      technologies: ['Python', 'MuJoCo', 'PPO', 'Stable-Baselines3', 'PyTorch', 'Three.js', 'Gymnasium'],
-      featured: true,
-      facts: [
-        { value: '58.6 s', label: 'Record lap' },
-        { value: '107 min', label: 'Zero to record' },
-        { value: '1,060', label: 'Runs in the film' }
-      ]
-    },
-    {
-      id: 7,
-      name: 'DinoStudy',
-      year: 2026,
-      role: 'Solo',
-      scope: 'AI study coach',
-      description: 'Claude-powered study coach: an intake interview builds a weekly plan, focus sessions earn XP, progress hatches collectible dinosaurs. Hand-illustrated field-journal design.',
-      image: 'assets/images/DinoStudy.webp',
-      githubLink: 'https://github.com/itayco2/Elza',
-      siteLink: 'https://elzalearning.vercel.app/',
-      technologies: ['Next.js 15', 'React 19', 'TypeScript', 'Claude API', 'Prisma', 'Supabase', 'Tailwind', 'Framer Motion']
-    },
-    {
-      id: 6,
-      name: 'Elevator Management System',
-      year: 2026,
-      role: 'Solo',
-      scope: 'Realtime systems',
-      description: 'Real-time elevator simulator on SignalR: live tracking, smart call allocation, EF Core and SQL Server.',
-      image: 'assets/images/Elevator.webp',
-      githubLink: 'https://github.com/itayco2/AdviceElectronics',
-      siteLink: 'https://adviceassignment.netlify.app/',
-      technologies: ['React', 'ASP.NET Core', 'SignalR', 'SQL Server', 'EF Core', 'JWT']
-    },
-    {
-      id: 3,
-      name: 'Lian Gardens',
-      year: 2026,
-      role: 'Solo',
-      scope: 'Marketing site',
-      description: 'Marketing site for a landscaping business on Next.js 15 and React 19. Bilingual-ready, image-led, WhatsApp lead capture.',
-      image: 'assets/images/LianGardens.webp',
-      githubLink: 'https://github.com/itayco2/lian',
-      siteLink: 'https://liangardens.vercel.app/',
-      technologies: ['Next.js 15', 'React 19', 'TypeScript', 'Tailwind CSS', 'Framer Motion']
-    },
-    {
-      id: 1,
-      name: 'Workshop E-commerce & Recipes',
-      year: 2025,
-      role: 'Solo',
-      scope: 'Full-stack',
-      description: 'Angular front, ASP.NET API, Postgres, JWT auth, transactional email, admin dashboard. Live store, real orders.',
-      image: 'assets/images/AdiSite.webp',
-      githubLink: 'https://github.com/itayco2/AdiCohenFit',
-      siteLink: 'https://adicohenfit.netlify.app/home',
-      technologies: ['Angular', 'C#', 'PostgreSQL', 'TypeScript', 'JWT', 'SendGrid', 'Bootstrap']
-    },
-    {
-      id: 4,
-      name: 'CaTetris',
-      year: 2025,
-      role: 'Solo',
-      scope: 'Realtime game',
-      description: 'Multiplayer Tetris over Socket.io: clear lines, claim territory on a shared map. Realtime room state, Express backend.',
-      image: 'assets/images/CaTetris.webp',
-      githubLink: 'https://github.com/itayco2/CataTetris',
-      siteLink: 'https://catetris.netlify.app/',
-      technologies: ['React', 'Vite', 'TypeScript', 'Socket.io', 'Express']
-    },
-    {
-      id: 5,
-      name: 'Take-Safe',
-      year: 2025,
-      role: 'Solo',
-      scope: 'Client site',
-      description: 'Production client site for a locksmith specialist. Cinematic intro, JSON-LD structured data, Tailwind and Framer Motion.',
-      image: 'assets/images/TakeSafe.webp',
-      githubLink: 'https://github.com/itayco2/safelock',
-      siteLink: 'https://safe-locks.netlify.app/',
-      technologies: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion', 'JSON-LD']
-    },
-    {
-      id: 2,
-      name: 'University',
-      year: 2024,
-      role: 'Solo',
-      scope: 'Full-stack',
-      description: 'Course management for students, lecturers and admin. Role-based access end to end, on a REST API with SQL persistence.',
-      image: 'assets/images/University.webp',
-      githubLink: 'https://github.com/itayco2/FullStuckFinalProject',
-      siteLink: 'https://universityprojectitay.netlify.app/home',
-      technologies: ['Angular', 'TypeScript', 'C#', 'SQL', 'JWT', 'REST API']
-    }
-  ];
-
-  /** The film project, first in the list. */
-  get featured(): Project | undefined {
-    return this.projects.find((p) => p.featured);
-  }
-
-  /** This year's work, shown as cards. */
-  get recent(): Project[] {
-    return this.projects.filter((p) => !p.featured && p.year >= 2026);
-  }
-
-  /** Earlier work, shown as an index. */
-  get archive(): Project[] {
-    return this.projects.filter((p) => !p.featured && p.year < 2026);
-  }
-
   numberOf(project: Project): string {
     return (this.projects.indexOf(project) + 1).toString().padStart(2, '0');
   }
 
-  techLine(project: Project): string {
-    return project.technologies.slice(0, this.visibleTagLimit).join(' · ');
+  barWidth(bar: TokenBar): string {
+    const max = Math.max(...this.tokenBars.map((b) => b.value));
+    return `${(bar.value / max) * 100}%`;
+  }
+
+  toggle(id: string): void {
+    if (this.open.has(id)) this.open.delete(id);
+    else this.open.add(id);
   }
 
   ngAfterViewInit(): void {
@@ -307,17 +245,5 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.observer?.disconnect();
     this.videoObserver?.disconnect();
-  }
-
-  @HostListener('window:scroll')
-  onScroll(): void {
-    const next = window.scrollY > 24;
-    if (next !== this.isScrolled) this.isScrolled = next;
-  }
-
-  scrollTo(id: string, event?: Event): void {
-    event?.preventDefault();
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
