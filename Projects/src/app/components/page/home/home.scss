@@ -70,7 +70,7 @@ button { font: inherit; }
 }
 .chip__dot { width: 8px; height: 8px; border-radius: 50%; background: $accent; }
 .hero__name { @include display; font-size: clamp(5.5rem, 11.7vw, 10.5rem); line-height: 0.86; letter-spacing: -0.045em; }
-.hero__lede { max-width: 560px; font-size: 1.3125rem; line-height: 1.5; color: $text-2; text-wrap: pretty; }
+.hero__lede { max-width: 560px; font-size: 1.3125rem; line-height: 1.5; color: $text-2; text-wrap: pretty; strong { font-weight: 500; color: $text; } }
 .hero__actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .hero__portrait {
   position: absolute; right: 40px; bottom: 0; width: min(600px, 44vw); height: auto; aspect-ratio: 1;
