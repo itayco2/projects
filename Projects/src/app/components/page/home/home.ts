@@ -5,7 +5,6 @@ interface Proof {
   value: string;
   label: string;
   target: string;
-  live?: boolean;
 }
 
 type Media = 'film' | 'chart' | 'alert' | 'still';
@@ -17,16 +16,14 @@ interface Project {
   tag: string;
   line: string;
   media: Media;
-  /** Columns out of 12 on desktop; rows pair 8+4 and 5+7. */
-  span: 4 | 5 | 7 | 8;
+  /** Columns out of 12 on desktop: the film runs full width, the other two share a row. */
+  span: 6 | 12;
   image?: string;
   imageAlt?: string;
   video?: string;
   videoLabel?: string;
+  /** The code, on GitHub. */
   url: string;
-  /** Label for the card's link; set for a live product, else the card links to its code. */
-  cta?: string;
-  live?: boolean;
 }
 
 interface TokenBar {
@@ -62,8 +59,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   readonly proof: Proof[] = [
     { value: '58.6 s', label: 'Record lap · Driving RL', target: 'driving-rl' },
     { value: '−83%', label: 'Tokens per agent run · Lean-Swarm', target: 'lean-swarm' },
-    { value: '<100 / day', label: 'LLM calls, down from 2,900 · ApartmentBot', target: 'apartmentbot' },
-    { value: 'Live', label: 'Try it in your browser · DinoStudy', target: 'dinostudy', live: true }
+    { value: '<100 / day', label: 'LLM calls, down from 2,900 · ApartmentBot', target: 'apartmentbot' }
   ];
 
   /**
@@ -77,7 +73,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       tag: 'Reinforcement learning',
       line: 'A car that taught itself a stunt circuit in 107 minutes, on a laptop.',
       media: 'film',
-      span: 8,
+      span: 12,
       image: 'assets/images/DrivingRL.webp',
       imageAlt: 'The trained car mid-lap on the stunt circuit',
       video: 'assets/video/driving-rl.mp4',
@@ -90,7 +86,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       tag: 'Agents & evals',
       line: 'Multi-agent runs that read 83% fewer tokens and still catch every bug.',
       media: 'chart',
-      span: 4,
+      span: 6,
       url: 'https://github.com/itayco2/Token-Optimizer'
     },
     {
@@ -99,21 +95,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       tag: 'LLM in production',
       line: 'Every Israeli rental site in one Telegram alert, on under 100 LLM calls a day.',
       media: 'alert',
-      span: 5,
+      span: 6,
       url: 'https://github.com/itayco2/ApartmentBot'
-    },
-    {
-      id: 'dinostudy',
-      name: 'DinoStudy',
-      tag: 'LLM product',
-      line: 'A Claude study coach that turns one interview into a weekly plan.',
-      media: 'still',
-      span: 7,
-      image: 'assets/images/DinoStudy.webp',
-      imageAlt: 'DinoStudy landing page, hand-illustrated like a field journal',
-      url: 'https://elzalearning.vercel.app/',
-      cta: 'Try it',
-      live: true
     }
   ];
 

@@ -16,9 +16,10 @@
 
   <header class="hero" id="top">
     <div class="hero__copy">
-      <p class="chip"><span class="chip__dot" aria-hidden="true"></span>AI Engineer at AB Solutions</p>
+      <p class="chip"><span class="chip__dot" aria-hidden="true"></span>Available &middot; AI Engineer &middot; Full-Stack Developer</p>
       <h1 class="hero__name">Itay<br>Cohen</h1>
-      <p class="hero__lede"><strong>I ship production LLM systems and full-stack platforms.</strong> Below are a few things I&rsquo;ve built lately.</p>
+      <p class="hero__claim">I ship production <em>LLM systems</em> and full-stack platforms.</p>
+      <p class="hero__lede">From research to deployment: agentic LLM pipelines, evaluation harnesses and the platforms around them. Two-plus years shipping, currently Full-Stack / AI Engineer at AB Solutions.</p>
       <div class="hero__actions">
         <a class="btn btn--light btn--big" href="#work">
           <span>See the work</span>
@@ -32,7 +33,7 @@
 
   <nav class="proof" aria-label="Projects at a glance">
     <a class="proof__item" *ngFor="let item of proof" [href]="'#' + item.target">
-      <span class="proof__value"><span *ngIf="item.live" class="dot" aria-hidden="true"></span>{{ item.value }}</span>
+      <span class="proof__value">{{ item.value }}</span>
       <span class="proof__label">{{ item.label }}</span>
     </a>
   </nav>
@@ -92,7 +93,6 @@
 
           <a *ngSwitchDefault class="card__media" [href]="p.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Open ' + p.name">
             <img [src]="p.image" [alt]="p.imageAlt" width="800" height="500" loading="lazy" decoding="async">
-            <span *ngIf="p.live" class="card__live"><span class="dot" aria-hidden="true"></span>Live</span>
           </a>
         </ng-container>
 
@@ -102,15 +102,9 @@
             <h3 class="card__name">{{ p.name }}</h3>
             <p class="card__line">{{ p.line }}</p>
           </div>
-          <a *ngIf="p.cta; else codeLink" class="btn btn--light btn--big" [href]="p.url" target="_blank" rel="noopener noreferrer">
-            <span>{{ p.cta }}</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+          <a class="card__arrow" [href]="p.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="p.name + ' on GitHub'">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
           </a>
-          <ng-template #codeLink>
-            <a class="card__arrow" [href]="p.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="p.name + ' on GitHub'">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
-            </a>
-          </ng-template>
         </div>
       </article>
     </div>
