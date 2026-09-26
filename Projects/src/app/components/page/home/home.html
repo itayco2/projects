@@ -1,38 +1,50 @@
 <a class="skip-link" href="#work">Skip to projects</a>
 
-<div class="portfolio">
-  <header class="intro" id="top">
-    <div class="intro__bar">
-      <div class="intro__id">
-        <img *ngIf="hasPortrait; else monogram" class="intro__photo" [src]="portraitPath" alt="Itay Cohen" width="72" height="72">
-        <ng-template #monogram><span class="intro__photo intro__photo--mark" aria-hidden="true">IC</span></ng-template>
-        <div class="intro__name">
-          <span>Itay Cohen</span>
-          <span>AI Engineer</span>
-        </div>
-      </div>
-      <nav class="intro__links" aria-label="Contact">
-        <a class="btn btn--solid" [href]="'mailto:' + email">Email me</a>
-        <a class="btn btn--line" [href]="github" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a class="btn btn--line" [href]="linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a *ngIf="hasCv" class="btn btn--line" [href]="cvPath" target="_blank" rel="noopener" download>
-          <span>CV</span>
-          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 4v12m-5-5 5 5 5-5M5 20h14"/></svg>
-        </a>
-      </nav>
+<div class="page">
+  <nav class="nav" aria-label="Primary">
+    <a class="nav__brand" href="#top">Itay Cohen</a>
+    <div class="nav__links">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a *ngIf="hasCv" class="btn btn--line" [href]="cvPath" target="_blank" rel="noopener" download>
+        <span>Résumé</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 4v12m-5-5 5 5 5-5M5 20h14"/></svg>
+      </a>
     </div>
-    <h1 class="intro__title">A few things I&rsquo;ve <em>built lately</em>.</h1>
-    <p class="intro__lede">I&rsquo;m Itay Cohen, an AI engineer at AB Solutions. {{ projects.length }} projects from this year, each with one number you can check.</p>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero__copy">
+      <p class="chip"><span class="chip__dot" aria-hidden="true"></span>AI Engineer at AB Solutions</p>
+      <h1 class="hero__name">Itay<br>Cohen</h1>
+      <p class="hero__lede">I build AI systems and the software around them. Below are a few things I&rsquo;ve built lately.</p>
+      <div class="hero__actions">
+        <a class="btn btn--light btn--big" href="#work">
+          <span>See the work</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14m-6-6 6 6 6-6"/></svg>
+        </a>
+        <a class="btn btn--line btn--big" [href]="'mailto:' + email">{{ email }}</a>
+      </div>
+    </div>
+    <img class="hero__portrait" [src]="portraitPath" alt="Itay Cohen, smiling, in a grey t-shirt against a dark background" width="400" height="400" fetchpriority="high">
   </header>
+
+  <nav class="proof" aria-label="Projects at a glance">
+    <a class="proof__item" *ngFor="let item of proof" [href]="'#' + item.target">
+      <span class="proof__value"><span *ngIf="item.live" class="dot" aria-hidden="true"></span>{{ item.value }}</span>
+      <span class="proof__label">{{ item.label }}</span>
+    </a>
+  </nav>
 
   <main id="work" class="work">
     <div class="work__head">
-      <h2>Selected work</h2>
-      <span>Every number links to its source</span>
+      <h2 class="title">Built lately</h2>
+      <p class="mono">{{ projects.length }} projects &middot; 2026</p>
     </div>
 
     <div class="grid">
-      <article class="card reveal" *ngFor="let p of projects" [id]="p.id">
+      <article *ngFor="let p of projects" class="card reveal" [id]="p.id" [ngClass]="'card--' + p.span">
         <ng-container [ngSwitch]="p.media">
           <div *ngSwitchCase="'film'" class="card__media">
             <video
@@ -52,20 +64,18 @@
           </div>
 
           <div *ngSwitchCase="'chart'" class="card__media chart" role="img" aria-label="Tokens read per run: 813.6 thousand with default agents, 140.1 thousand with lean roles, 83% fewer">
-            <div class="chart__head"><span>Tokens read per run</span><span>7-agent code review</span></div>
+            <p class="mono">tokens read per run</p>
             <span class="chart__big">−83%</span>
             <div class="chart__bars">
-              <ng-container *ngFor="let bar of tokenBars">
-                <span class="chart__label">{{ bar.label }}</span>
-                <span class="chart__row"><span class="chart__bar" [class.chart__bar--lean]="bar.lean" [style.width]="barWidth(bar)"></span>{{ bar.value }}k</span>
-              </ng-container>
+              <div *ngFor="let bar of tokenBars" class="chart__row">
+                <span>{{ bar.label }} &middot; {{ bar.value }}k</span>
+                <span class="chart__bar" [class.chart__bar--lean]="bar.lean" [style.width]="barWidth(bar)"></span>
+              </div>
             </div>
-            <span class="chart__foot">Same prompts · every planted bug still found</span>
           </div>
 
           <div *ngSwitchCase="'alert'" class="card__media alert">
             <div class="alert__phone" aria-hidden="true">
-              <div class="alert__top"><span class="alert__avatar"></span>ApartmentBot</div>
               <div class="alert__msg" dir="rtl" lang="he">
                 <div class="alert__photo" dir="ltr">listing photo</div>
                 <div class="alert__text">
@@ -76,75 +86,64 @@
                   <p class="alert__meta">לפני 12 דקות · ללא תיווך · יד2</p>
                 </div>
               </div>
-              <div class="alert__buttons" dir="rtl"><span>פתח מודעה</span><span>מפה</span><span>WhatsApp</span></div>
             </div>
-            <span class="alert__note">sample alert</span>
+            <span class="alert__note mono">sample alert</span>
           </div>
 
-          <a *ngSwitchDefault class="card__media" [href]="p.links[0].url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Open ' + p.name">
+          <a *ngSwitchDefault class="card__media" [href]="p.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Open ' + p.name">
             <img [src]="p.image" [alt]="p.imageAlt" width="800" height="500" loading="lazy" decoding="async">
-            <span class="card__live" *ngIf="p.live"><span class="dot" aria-hidden="true"></span>Live</span>
+            <span *ngIf="p.live" class="card__live"><span class="dot" aria-hidden="true"></span>Live</span>
           </a>
         </ng-container>
 
-        <div class="card__copy">
-          <p class="label">{{ numberOf(p) }} &middot; {{ p.name }} &middot; {{ p.area }}</p>
-          <h3 class="card__claim">{{ p.claim }}</h3>
-          <p class="card__why"><span>Why it&rsquo;s here:</span> {{ p.why }}</p>
-        </div>
-
-        <div class="card__stat">
-          <span class="card__value">{{ p.stat.value }}</span>
-          <span class="card__stat-label">{{ p.stat.label }}</span>
-          <a *ngIf="p.stat.source" class="card__source" [href]="p.stat.source" target="_blank" rel="noopener noreferrer">source &#8599;</a>
-          <span *ngIf="p.note" class="card__source">{{ p.note }}</span>
-        </div>
-
-        <div class="card__foot">
-          <span class="card__stack">{{ p.stack }}</span>
-          <div class="card__actions">
-            <button
-              *ngIf="p.details"
-              type="button"
-              class="card__toggle"
-              [attr.aria-expanded]="open.has(p.id)"
-              [attr.aria-controls]="p.id + '-details'"
-              (click)="toggle(p.id)"
-            >How it works <span aria-hidden="true">{{ open.has(p.id) ? '−' : '+' }}</span></button>
-            <a
-              *ngFor="let link of p.links"
-              class="btn"
-              [class.btn--solid]="link.primary"
-              [class.btn--outline]="!link.primary"
-              [href]="link.url"
-              target="_blank"
-              rel="noopener noreferrer"
-            >{{ link.label }} &#8599;</a>
+        <div class="card__body">
+          <div class="card__copy">
+            <p class="mono mono--caps">{{ p.tag }}</p>
+            <h3 class="card__name">{{ p.name }}</h3>
+            <p class="card__line">{{ p.line }}</p>
           </div>
+          <a *ngIf="p.cta; else codeLink" class="btn btn--light btn--big" [href]="p.url" target="_blank" rel="noopener noreferrer">
+            <span>{{ p.cta }}</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+          <ng-template #codeLink>
+            <a class="card__arrow" [href]="p.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="p.name + ' on GitHub'">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
+          </ng-template>
         </div>
-
-        <dl *ngIf="p.details && open.has(p.id)" class="card__details" [id]="p.id + '-details'">
-          <div *ngFor="let d of p.details">
-            <dt>{{ d.label }}</dt>
-            <dd>{{ d.text }}</dd>
-          </div>
-        </dl>
       </article>
     </div>
   </main>
 
+  <section id="about" class="about">
+    <h2 class="title">About</h2>
+    <div class="about__body">
+      <p class="about__text">I&rsquo;m an AI engineer at AB Solutions, where I co-architect Prism AI, a multi-tenant agentic LLM platform. Before software I was an IDF combat medic, leading a team of 12. I like problems where the answer has to be measured, not guessed.</p>
+      <dl class="facts">
+        <div *ngFor="let fact of facts">
+          <dt class="mono mono--caps">{{ fact.label }}</dt>
+          <dd>{{ fact.value }}</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
   <footer id="contact" class="contact">
     <div class="contact__main">
-      <h2 class="contact__title">Hiring an AI engineer? <em>Let&rsquo;s talk.</em></h2>
-      <a class="btn btn--paper" [href]="'mailto:' + email">{{ email }}</a>
+      <h2 class="contact__title">Let&rsquo;s talk.</h2>
+      <div class="contact__side">
+        <a class="btn btn--dark btn--big" [href]="'mailto:' + email">{{ email }}</a>
+        <div class="contact__links">
+          <a [href]="linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a [href]="github" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a *ngIf="hasCv" [href]="cvPath" target="_blank" rel="noopener" download>Résumé</a>
+        </div>
+      </div>
     </div>
     <div class="contact__bar">
       <span>&copy; 2026 Itay Cohen</span>
-      <span class="contact__links">
-        <a [href]="github" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a [href]="linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a *ngIf="hasCv" [href]="cvPath" target="_blank" rel="noopener" download>CV</a>
-      </span>
+      <span>Built with Angular</span>
     </div>
   </footer>
 

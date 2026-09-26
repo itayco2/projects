@@ -1,18 +1,18 @@
-/* Global styles — paper editorial ground; everything else lives in the home component */
+/* Global styles — studio dark ground (the portrait's own background); everything else lives in the home component */
 html, body {
   margin: 0;
   padding: 0;
-  background: #f7f5f0;
-  color: #1a1917;
-  font-family: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: #141517;
+  color: #f2f0eb;
+  font-family: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: rgba(36, 71, 212, 0.18);
-  color: #1a1917;
+  background: rgba(244, 162, 97, 0.32);
+  color: #f2f0eb;
 }
 
 ::-webkit-scrollbar {
@@ -20,20 +20,20 @@ html, body {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #f7f5f0;
+  background: #141517;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c9c4b8;
+  background: #3a3b40;
   border-radius: 10px;
-  border: 2px solid #f7f5f0;
+  border: 2px solid #141517;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a297;
+  background: #56575c;
 }
 
 /* Global focus ring — visible on keyboard nav, suppressed on mouse */
 :focus-visible {
-  outline: 2px solid #2447d4;
+  outline: 2px solid #f4a261;
   outline-offset: 3px;
   border-radius: 4px;
 }

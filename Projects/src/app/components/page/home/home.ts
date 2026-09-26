@@ -1,22 +1,11 @@
 import { AfterViewInit, Component, NgZone, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-interface Stat {
+interface Proof {
   value: string;
   label: string;
-  /** Where the number was measured. */
-  source?: string;
-}
-
-interface Detail {
-  label: string;
-  text: string;
-}
-
-interface ProjectLink {
-  label: string;
-  url: string;
-  primary?: boolean;
+  target: string;
+  live?: boolean;
 }
 
 type Media = 'film' | 'chart' | 'alert' | 'still';
@@ -24,29 +13,31 @@ type Media = 'film' | 'chart' | 'alert' | 'still';
 interface Project {
   id: string;
   name: string;
-  area: string;
-  /** The headline: what it is, in one line. */
-  claim: string;
-  /** Why it earns its place on an AI-engineer portfolio. */
-  why: string;
-  stat: Stat;
-  stack: string;
+  /** The skill it proves, shown as the card's tag. */
+  tag: string;
+  line: string;
   media: Media;
+  /** Columns out of 12 on desktop; rows pair 8+4 and 5+7. */
+  span: 4 | 5 | 7 | 8;
   image?: string;
   imageAlt?: string;
   video?: string;
   videoLabel?: string;
-  links: ProjectLink[];
+  url: string;
+  /** Label for the card's link; set for a live product, else the card links to its code. */
+  cta?: string;
   live?: boolean;
-  note?: string;
-  /** "How it works": three short lines, hidden until asked for. */
-  details?: Detail[];
 }
 
 interface TokenBar {
   label: string;
   value: number;
   lean?: boolean;
+}
+
+interface Fact {
+  label: string;
+  value: string;
 }
 
 @Component({
@@ -61,108 +52,82 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   readonly github = 'https://github.com/itayco2';
   readonly linkedin = 'https://www.linkedin.com/in/itay-cohen-941552349/';
 
-  // CV download — set to true after dropping the PDF at public/assets/Itay-Cohen-CV.pdf
+  // Résumé download — set to true after dropping the PDF at public/assets/Itay-Cohen-CV.pdf
   readonly hasCv = false;
   readonly cvPath = 'assets/Itay-Cohen-CV.pdf';
 
-  // Photo beside the name — set to true after dropping it at public/assets/images/portrait.webp
-  readonly hasPortrait = false;
   readonly portraitPath = 'assets/images/portrait.webp';
 
+  /** One number per project, closing the first screen: the whole portfolio in two seconds. */
+  readonly proof: Proof[] = [
+    { value: '58.6 s', label: 'Record lap · Driving RL', target: 'driving-rl' },
+    { value: '−83%', label: 'Tokens per agent run · Lean-Swarm', target: 'lean-swarm' },
+    { value: '<100 / day', label: 'LLM calls, down from 2,900 · ApartmentBot', target: 'apartmentbot' },
+    { value: 'Live', label: 'Try it in your browser · DinoStudy', target: 'dinostudy', live: true }
+  ];
+
   /**
-   * Each project is here for one thing it proves to an AI-engineer hiring
-   * manager. One line, one number with its source, and the rest behind
-   * "How it works". A project that proves nothing the others don't stays off.
+   * Each project is here for one skill an AI-engineer hiring manager looks for,
+   * named by its tag. A project that proves nothing the others don't stays off.
    */
   readonly projects: Project[] = [
     {
       id: 'driving-rl',
       name: 'Driving RL',
-      area: 'Reinforcement learning',
-      claim: 'A car that taught itself a stunt circuit.',
-      why: 'I can train a model, not just call one.',
-      stat: {
-        value: '58.6 s',
-        label: 'record lap, 107 min of training on a laptop',
-        source: 'https://github.com/itayco2/driving-rl#the-numbers-run-3-the-canonical-run'
-      },
-      stack: 'PyTorch · MuJoCo · PPO · Three.js',
+      tag: 'Reinforcement learning',
+      line: 'A car that taught itself a stunt circuit in 107 minutes, on a laptop.',
       media: 'film',
+      span: 8,
       image: 'assets/images/DrivingRL.webp',
       imageAlt: 'The trained car mid-lap on the stunt circuit',
       video: 'assets/video/driving-rl.mp4',
       videoLabel: 'Film of the trained car lapping the stunt circuit',
-      links: [{ label: 'Code', url: 'https://github.com/itayco2/driving-rl' }],
-      details: [
-        { label: 'Problem', text: 'Lap a 2.3 km circuit with two jumps and three water chasms. No GPU, no demonstrations.' },
-        { label: 'Built', text: 'A MuJoCo world and Gymnasium environment, trained with PPO. Every generation filmed in Three.js.' },
-        { label: 'Result', text: 'The first run made zero laps. I found and fixed 20 defects; the rebuilt run set a 58.6 s record.' }
-      ]
+      url: 'https://github.com/itayco2/driving-rl'
     },
     {
       id: 'lean-swarm',
       name: 'Lean-Swarm',
-      area: 'Agents & evals',
-      claim: 'Agent runs that read 83% fewer tokens and miss no bugs.',
-      why: 'I measure agent systems and cut their cost without losing quality.',
-      stat: {
-        value: '11 / 11',
-        label: 'subtle bugs found, 0 of 15 decoys flagged',
-        source: 'https://github.com/itayco2/Token-Optimizer#proof'
-      },
-      stack: 'Claude Code · Multi-agent · Evals · Node.js',
+      tag: 'Agents & evals',
+      line: 'Multi-agent runs that read 83% fewer tokens and still catch every bug.',
       media: 'chart',
-      links: [{ label: 'Code', url: 'https://github.com/itayco2/Token-Optimizer' }],
-      details: [
-        { label: 'Problem', text: 'Across 2,121 agents, 43% of 8.08B tokens read was each agent’s fixed start: tools it never used.' },
-        { label: 'Built', text: 'X-ray, a CLI that reads Claude Code logs, and five lean agent roles, shipped as a plugin.' },
-        { label: 'Result', text: '−83% tokens read on a 7-agent review, same bugs found. The cost: runs 12–16% slower.' }
-      ]
+      span: 4,
+      url: 'https://github.com/itayco2/Token-Optimizer'
     },
     {
       id: 'apartmentbot',
       name: 'ApartmentBot',
-      area: 'LLM in production',
-      claim: 'Every Israeli rental site in one Telegram alert.',
-      why: 'I run LLMs in production, on messy input and a budget.',
-      stat: {
-        value: '2,900 → <100',
-        label: 'LLM calls a day',
-        source: 'https://github.com/itayco2/ApartmentBot'
-      },
-      stack: 'TypeScript · Gemini · Zod · 443 tests',
+      tag: 'LLM in production',
+      line: 'Every Israeli rental site in one Telegram alert, on under 100 LLM calls a day.',
       media: 'alert',
-      links: [{ label: 'Code', url: 'https://github.com/itayco2/ApartmentBot' }],
-      details: [
-        { label: 'Problem', text: 'Listings are spread over five sites and free-text Hebrew posts in Telegram and Facebook groups.' },
-        { label: 'Built', text: 'Hand-written parsers, Gemini output validated with Zod, cross-site dedupe, Telegram alerts.' },
-        { label: 'Result', text: '1,178 cities. Ten posts per model call keeps it under 100 calls a day, inside the free tier.' }
-      ]
+      span: 5,
+      url: 'https://github.com/itayco2/ApartmentBot'
     },
     {
       id: 'dinostudy',
       name: 'DinoStudy',
-      area: 'LLM product',
-      claim: 'A Claude study coach that plans your week.',
-      why: 'it’s the one you can use right now, built end to end.',
-      stat: { value: 'Live', label: 'elzalearning.vercel.app' },
-      stack: 'Next.js · Claude API · Prisma · Supabase',
+      tag: 'LLM product',
+      line: 'A Claude study coach that turns one interview into a weekly plan.',
       media: 'still',
+      span: 7,
       image: 'assets/images/DinoStudy.webp',
       imageAlt: 'DinoStudy landing page, hand-illustrated like a field journal',
-      links: [{ label: 'Open it', url: 'https://elzalearning.vercel.app/', primary: true }],
-      live: true,
-      note: 'code private'
+      url: 'https://elzalearning.vercel.app/',
+      cta: 'Try it',
+      live: true
     }
   ];
 
-  /** Lean-Swarm, round 1: tokens read per run, in thousands. */
+  /** Lean-Swarm's 7-agent review workflow: tokens read per run, in thousands. */
   readonly tokenBars: TokenBar[] = [
-    { label: 'default', value: 813.6 },
-    { label: 'lean', value: 140.1, lean: true }
+    { label: 'default agents', value: 813.6 },
+    { label: 'lean roles', value: 140.1, lean: true }
   ];
 
-  readonly open = new Set<string>();
+  readonly facts: Fact[] = [
+    { label: 'Now', value: 'AB Solutions, Prism AI' },
+    { label: 'Studied', value: 'John Bryce, GPA 100' },
+    { label: 'Served', value: 'IDF combat medic' }
+  ];
 
   showCookieBanner = false;
   private readonly cookieKey = 'cookie-consent';
@@ -172,18 +137,9 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   constructor(private zone: NgZone) {}
 
-  numberOf(project: Project): string {
-    return (this.projects.indexOf(project) + 1).toString().padStart(2, '0');
-  }
-
   barWidth(bar: TokenBar): string {
     const max = Math.max(...this.tokenBars.map((b) => b.value));
     return `${(bar.value / max) * 100}%`;
-  }
-
-  toggle(id: string): void {
-    if (this.open.has(id)) this.open.delete(id);
-    else this.open.add(id);
   }
 
   ngAfterViewInit(): void {
