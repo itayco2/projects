@@ -64,15 +64,16 @@
             </video>
           </div>
 
-          <div *ngSwitchCase="'chart'" class="card__media chart" role="img" aria-label="Tokens read per run: 813.6 thousand with default agents, 140.1 thousand with lean roles, 83% fewer">
-            <p class="mono">tokens read per run</p>
-            <span class="chart__big">−83%</span>
+          <div *ngSwitchCase="'chart'" class="card__media chart" role="img" aria-label="Tokens read per run by long review agents: 6.61 million with default agents, 3.19 million with lean roles, 52% fewer. Cost per run 4.98 to 3.08 dollars; all 12 planted bugs found by both">
+            <p class="mono">tokens read per run &middot; long review agents</p>
+            <span class="chart__big">−52%</span>
             <div class="chart__bars">
               <div *ngFor="let bar of tokenBars" class="chart__row">
-                <span>{{ bar.label }} &middot; {{ bar.value }}k</span>
+                <span>{{ bar.label }} &middot; {{ bar.value }}M</span>
                 <span class="chart__bar" [class.chart__bar--lean]="bar.lean" [style.width]="barWidth(bar)"></span>
               </div>
             </div>
+            <p class="mono chart__foot">$4.98 &rarr; $3.08 per run &middot; 12/12 bugs found</p>
           </div>
 
           <div *ngSwitchCase="'alert'" class="card__media alert">

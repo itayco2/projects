@@ -58,7 +58,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   /** One number per project, closing the first screen: the whole portfolio in two seconds. */
   readonly proof: Proof[] = [
     { value: '58.6 s', label: 'Record lap · Driving RL', target: 'driving-rl' },
-    { value: '−83%', label: 'Tokens per agent run · Lean-Swarm', target: 'lean-swarm' },
+    { value: '−52%', label: 'Tokens per run, long agents · Lean-Swarm', target: 'lean-swarm' },
     { value: '<100 / day', label: 'LLM calls, down from 2,900 · ApartmentBot', target: 'apartmentbot' }
   ];
 
@@ -84,10 +84,10 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       id: 'lean-swarm',
       name: 'Lean-Swarm',
       tag: 'Agents & evals',
-      line: 'Multi-agent runs that read 83% fewer tokens and still catch every bug.',
+      line: 'Multi-agent runs that read half the tokens, cost 38% less and still catch every bug.',
       media: 'chart',
       span: 6,
-      url: 'https://github.com/itayco2/Token-Optimizer'
+      url: 'https://github.com/itayco2/Lean-Swarm'
     },
     {
       id: 'apartmentbot',
@@ -100,10 +100,13 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
   ];
 
-  /** Lean-Swarm's 7-agent review workflow: tokens read per run, in thousands. */
+  /**
+   * Lean-Swarm v0.2 on long review agents (15–27 turns, 15,000-line codebase):
+   * tokens read per run, in millions. The repo's headline result, not its best round.
+   */
   readonly tokenBars: TokenBar[] = [
-    { label: 'default agents', value: 813.6 },
-    { label: 'lean roles', value: 140.1, lean: true }
+    { label: 'default agents', value: 6.61 },
+    { label: 'lean roles', value: 3.19, lean: true }
   ];
 
   readonly facts: Fact[] = [

@@ -129,6 +129,7 @@ button { font: inherit; }
 .chart__bars { display: flex; flex-direction: column; gap: 14px; font-family: $mono; font-size: 12px; color: $text-2; }
 .chart__row { display: flex; flex-direction: column; gap: 6px; }
 .chart__bar { height: 10px; border-radius: 5px; background: #4a4b50; &--lean { background: $accent; } }
+.chart__foot { color: $text-2; }
 
 // ===== ApartmentBot alert =====
 .alert { background: $raised; }
@@ -238,7 +239,7 @@ button { font: inherit; }
   .card__name { font-size: 1.625rem; }
   .card__line { font-size: 1rem; }
   .card__arrow { align-self: flex-start; }
-  .chart { padding: 20px; }
+  .chart { padding: 20px; height: auto; min-height: 220px; gap: 14px; }
   .chart__big { font-size: 4.75rem; }
   .alert__phone { transform: scale(0.72); transform-origin: top center; top: 20px; }
   .about { margin: 0 $g; padding: 56px 0 72px; }
