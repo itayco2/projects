@@ -132,6 +132,26 @@
             </div>
           </div>
 
+          <div *ngSwitchCase="'board'" class="card__media board">
+            <figure class="board__mark">
+              <div class="mark" role="img" aria-label="An 8 by 8 board: squares Blink sees as alike to e4 glow, along its rank and file. Read from the model's own trained weights.">
+                <span *ngFor="let c of blinkCells" [style.background]="c"></span>
+              </div>
+              <figcaption class="mono">not a drawing: 64 numbers from the trained model &middot; brighter squares are the ones Blink learned to link to e4</figcaption>
+            </figure>
+            <div class="board__stats chart" role="img" aria-label="On the first 2,000 of DeepMind's chess puzzles, Blink solves 90.1% with no search; DeepMind's 9M model solves 86.6%. Blink has 22.5 million parameters, trained from random weights on one home GPU.">
+              <p class="mono">DeepMind's chess puzzles &middot; solved with no search</p>
+              <span class="chart__big">90.1%</span>
+              <div class="chart__bars">
+                <div *ngFor="let bar of blinkBars" class="chart__row">
+                  <span>{{ bar.label }} &middot; {{ bar.value }}%</span>
+                  <span class="chart__bar" [class.chart__bar--lean]="bar.lean" [style.width]="pctWidth(bar)"></span>
+                </div>
+              </div>
+              <p class="mono chart__foot">from random weights &middot; 403M positions &middot; $0</p>
+            </div>
+          </div>
+
           <a *ngSwitchDefault class="card__media" [href]="p.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Open ' + p.name">
             <img [src]="p.image" [alt]="p.imageAlt" width="800" height="500" loading="lazy" decoding="async">
           </a>
@@ -181,7 +201,6 @@
     </div>
     <div class="contact__bar">
       <span>&copy; 2026 Itay Cohen</span>
-      <span>Built with Angular</span>
     </div>
   </footer>
 

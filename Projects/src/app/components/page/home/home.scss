@@ -82,7 +82,7 @@ button { font: inherit; }
 
 // ===== Proof strip =====
 .proof {
-  margin: 0 $gutter; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 $gutter; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
   border-top: 1px solid $line; border-bottom: 1px solid $line;
 }
 .proof__item {
@@ -109,6 +109,7 @@ button { font: inherit; }
   display: flex; flex-direction: column; scroll-margin-top: 24px;
   &--4 { grid-column: span 4; }
   &--8 { grid-column: span 8; }
+  &--12 { grid-column: span 12; }
   // Both rows: the media grows to fill, the copy stacks above its button
   &--tall { grid-row: span 2; }
   &--tall .card__media { height: auto; flex: 1 1 auto; }
@@ -128,6 +129,20 @@ button { font: inherit; }
   width: 52px; height: 52px; flex: none; border-radius: 50%; border: 1px solid $line-2; color: $text;
   display: flex; align-items: center; justify-content: center; transition: background 0.2s, color 0.2s, border-color 0.2s;
   &:hover { background: $text; color: $ground; border-color: $text; }
+}
+
+// ===== Blink: the board read from the model's weights, beside its score =====
+.board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.board__mark {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+  border-right: 1px solid #1f2023;
+  figcaption { color: $text-3; font-size: 12px; max-width: 46ch; text-align: center; line-height: 1.5; }
+}
+.board__stats { background: transparent; padding: 40px 48px; }
+.mark {
+  width: 320px; aspect-ratio: 1; padding: 14px; border-radius: 30px; background: $ground;
+  display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px;
+  > span { border-radius: 5px; }
 }
 
 // ===== Lean-Swarm chart =====
@@ -283,12 +298,15 @@ button { font: inherit; }
     padding: 24px 20px;
     &:nth-child(odd) { padding-left: 0; }
     &:nth-child(even) { padding-right: 0; border-right: none; }
-    &:nth-child(-n + 2) { border-bottom: 1px solid $line; }
+    &:nth-child(-n + 4) { border-bottom: 1px solid $line; }
+    &:last-child:nth-child(odd) { grid-column: span 2; padding-left: 0; }
   }
   .proof__value { font-size: 2.25rem; }
   .work { padding: 104px $g 96px; }
   .card__media { height: 360px; }
   .card--8 .card__media { height: 440px; }
+  .card__media.board { height: auto; }
+  .board__mark { padding: 28px 16px; }
   .about { margin: 0 $g; .title { grid-column: span 12; margin-bottom: 32px; } }
   .about__body { grid-column: span 12; }
 }
@@ -309,13 +327,18 @@ button { font: inherit; }
     padding: 16px 0; flex-direction: row; align-items: baseline; justify-content: space-between; gap: 12px;
     border-right: none; border-bottom: 1px solid $line;
     &:last-child { border-bottom: none; }
+    &:last-child:nth-child(odd) { grid-column: auto; }
   }
   .proof__value { font-size: 2rem; }
   .proof__label { font-size: 13px; text-align: right; }
   .work { padding: 64px $g 56px; gap: 24px; }
   .title { font-size: 2.5rem; }
   .grid { gap: 16px; }
-  .card--4, .card--8 { grid-column: span 12; }
+  .card--4, .card--8, .card--12 { grid-column: span 12; }
+  .card__media.board { height: auto; grid-template-columns: minmax(0, 1fr); }
+  .board__mark { padding: 24px 0 8px; border-right: none; }
+  .mark { width: min(240px, 70vw); padding: 10px; border-radius: 22px; gap: 3px; }
+  .board__stats { padding: 20px; }
   .card { padding: 8px; border-radius: 22px; }
   .card__media, .card--8 .card__media { height: 220px; border-radius: 15px; }
   .card__body, .card--tall .card__body { padding: 16px 10px 10px; flex-direction: column; align-items: stretch; gap: 16px; }

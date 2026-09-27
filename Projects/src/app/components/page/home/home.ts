@@ -9,7 +9,7 @@ interface Proof {
   live?: boolean;
 }
 
-type Media = 'film' | 'chart' | 'alert' | 'redacted' | 'still';
+type Media = 'film' | 'chart' | 'alert' | 'redacted' | 'still' | 'board';
 
 interface Project {
   id: string;
@@ -20,9 +20,9 @@ interface Project {
   media: Media;
   /**
    * Columns out of 12 on wide screens. A bento: the film (8) and the tall AI Stock Agent
-   * (4, both rows) side by side, the other two (4 + 4) under the film.
+   * (4, both rows) side by side, the other two (4 + 4) under the film; Blink (12) full width below.
    */
-  span: 4 | 8;
+  span: 4 | 8 | 12;
   /** Spans both grid rows. */
   tall?: boolean;
   image?: string;
@@ -67,7 +67,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     { value: '58.6 s', label: 'Record lap · Driving RL', target: 'driving-rl' },
     { value: 'Live', label: 'Autonomous trading, in production · AI Stock Agent', target: 'ai-stock-agent', live: true },
     { value: '−52%', label: 'Tokens per run, long agents · Lean-Swarm', target: 'lean-swarm' },
-    { value: '<100 / day', label: 'LLM calls, down from 2,900 · ApartmentBot', target: 'apartmentbot' }
+    { value: '<100 / day', label: 'LLM calls, down from 2,900 · ApartmentBot', target: 'apartmentbot' },
+    { value: '90.1%', label: 'DeepMind chess puzzles, no search · Blink', target: 'blink' }
   ];
 
   /**
@@ -114,6 +115,15 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       media: 'alert',
       span: 4,
       url: 'https://github.com/itayco2/ApartmentBot'
+    },
+    {
+      id: 'blink',
+      name: 'Blink',
+      tag: 'Machine learning',
+      line: "A chess AI that never searches, trained from scratch on one home GPU, and it beats DeepMind's 9M model.",
+      media: 'board',
+      span: 12,
+      url: 'https://github.com/itayco2/Blink-Chess'
     }
   ];
 
@@ -121,6 +131,24 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
    * Lean-Swarm v0.2 on long review agents (15–27 turns, 15,000-line codebase):
    * tokens read per run, in millions. The repo's headline result, not its best round.
    */
+  /**
+   * Blink's mark and card visual: e4's cosine similarity to all 64 squares, read from the shipped
+   * model's own square embeddings (runs/long-final, step 151,722, raw weights), rank 8 first.
+   * Nobody drew it: the bright cross is the board geometry the model learned by itself.
+   */
+  private readonly e4: number[] = [
+    -0.43, -0.37, -0.41, -0.11, -0.18, -0.1, -0.43, -0.24, -0.13, -0.27, 0.1, 0.14, 0.35, 0.07, 0.03, -0.26,
+    -0.2, 0.09, 0.21, 0.57, 0.48, 0.49, 0.01, 0.04, 0.21, 0.17, 0.64, 0.72, 1.0, 0.55, 0.45, 0.15,
+    -0.15, 0.14, 0.2, 0.65, 0.55, 0.53, 0.05, 0.12, -0.13, -0.26, 0.25, 0.17, 0.46, 0.17, 0.05, -0.24,
+    -0.46, -0.22, -0.3, 0.04, -0.09, 0.06, -0.29, -0.17, -0.24, -0.4, -0.12, -0.15, 0.1, -0.17, -0.11, -0.32
+  ];
+  readonly blinkCells: string[] = this.boardCells();
+  /** Share of the first 2,000 DeepMind puzzles solved, both models on the same puzzles. */
+  readonly blinkBars: TokenBar[] = [
+    { label: 'Blink · 22.5M parameters · one home GPU', value: 90.1, lean: true },
+    { label: 'DeepMind 9M', value: 86.6 }
+  ];
+
   readonly tokenBars: TokenBar[] = [
     { label: 'default agents', value: 6.61 },
     { label: 'lean roles', value: 3.19, lean: true }
@@ -151,7 +179,59 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   private observer?: IntersectionObserver;
   private videoObserver?: IntersectionObserver;
 
+  /**
+   * In-page links (#work, #about, …): with <base href="/"> the browser resolves "#work" to "/#work",
+   * a different URL than /home, and reloads the page at the top. So the page scrolls itself.
+   */
+  private readonly onAnchorClick = (event: MouseEvent): void => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+    const link = (event.target as Element | null)?.closest?.('a[href^="#"]');
+    const id = link?.getAttribute('href')?.slice(1);
+    if (!id) {
+      return;
+    }
+    const target = id === 'top' ? document.body : document.getElementById(id);
+    if (!target) {
+      return;
+    }
+    event.preventDefault();
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (id === 'top') {
+      window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+    } else {
+      target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+      if (!target.hasAttribute('tabindex')) {
+        target.setAttribute('tabindex', '-1');
+      }
+      target.focus({ preventScroll: true });
+    }
+    history.replaceState(null, '', `${location.pathname}#${id}`);
+  };
+
   constructor(private zone: NgZone) {}
+
+  private boardCells(): string[] {
+    const mix = (a: number[], b: number[], t: number) => a.map((x, i) => Math.round(x + (b[i] - x) * t));
+    const hex = (c: number[]) => '#' + c.map((x) => x.toString(16).padStart(2, '0')).join('');
+    const low = [25, 25, 27], zero = [44, 45, 49], hot = [244, 162, 97], top = [248, 236, 214];
+    const cells: string[] = [];
+    for (let rank = 7; rank >= 0; rank--) {
+      for (let file = 0; file < 8; file++) {
+        const v = Math.max(-1, Math.min(1, this.e4[rank * 8 + file]));
+        if (v < 0) cells.push(hex(mix(zero, low, Math.min(1, -v / 0.45))));
+        else if (v < 0.6) cells.push(hex(mix(zero, hot, v / 0.6)));
+        else cells.push(hex(mix(hot, top, (v - 0.6) / 0.4)));
+      }
+    }
+    return cells;
+  }
+
+  /** Bars drawn to scale: a percentage fills that share of the track. */
+  pctWidth(bar: TokenBar): string {
+    return `${bar.value}%`;
+  }
 
   barWidth(bar: TokenBar): string {
     const max = Math.max(...this.tokenBars.map((b) => b.value));
@@ -169,6 +249,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
 
     this.zone.runOutsideAngular(() => {
+      document.addEventListener('click', this.onAnchorClick);
+
       // Scroll-triggered reveals
       const items = document.querySelectorAll<HTMLElement>('.reveal');
       this.observer = new IntersectionObserver((entries) => {
@@ -215,6 +297,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    document.removeEventListener('click', this.onAnchorClick);
     this.observer?.disconnect();
     this.videoObserver?.disconnect();
   }
