@@ -68,7 +68,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     { value: 'Live', label: 'Autonomous trading, in production · AI Stock Agent', target: 'ai-stock-agent', live: true },
     { value: '−52%', label: 'Tokens per run, long agents · Lean-Swarm', target: 'lean-swarm' },
     { value: '<100 / day', label: 'LLM calls, down from 2,900 · ApartmentBot', target: 'apartmentbot' },
-    { value: '89.8%', label: 'DeepMind's 10,000 chess puzzles, no search · Blink', target: 'blink' }
+    { value: '89.8%', label: "DeepMind's 10,000 chess puzzles, no search · Blink", target: 'blink' }
   ];
 
   /**
