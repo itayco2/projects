@@ -68,7 +68,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     { value: 'Live', label: 'Autonomous trading, in production · AI Stock Agent', target: 'ai-stock-agent', live: true },
     { value: '−52%', label: 'Tokens per run, long agents · Lean-Swarm', target: 'lean-swarm' },
     { value: '<100 / day', label: 'LLM calls, down from 2,900 · ApartmentBot', target: 'apartmentbot' },
-    { value: '90.1%', label: 'DeepMind chess puzzles, no search · Blink', target: 'blink' }
+    { value: '90.2%', label: 'DeepMind chess puzzles, no search · Blink', target: 'blink' }
   ];
 
   /**
@@ -145,7 +145,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   readonly blinkCells: string[] = this.boardCells();
   /** Share of the first 2,000 DeepMind puzzles solved, both models on the same puzzles. */
   readonly blinkBars: TokenBar[] = [
-    { label: 'Blink · 22.5M parameters · one home GPU', value: 90.1, lean: true },
+    { label: 'Blink · 22.5M parameters · one home GPU', value: 90.2, lean: true },
     { label: 'DeepMind 9M', value: 86.6 }
   ];
 
