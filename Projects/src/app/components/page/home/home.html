@@ -33,7 +33,7 @@
 
   <nav class="proof" aria-label="Projects at a glance">
     <a class="proof__item" *ngFor="let item of proof" [href]="'#' + item.target">
-      <span class="proof__value">{{ item.value }}</span>
+      <span class="proof__value"><span *ngIf="item.live" class="chip__dot" aria-hidden="true"></span>{{ item.value }}</span>
       <span class="proof__label">{{ item.label }}</span>
     </a>
   </nav>
@@ -41,11 +41,11 @@
   <main id="work" class="work">
     <div class="work__head">
       <h2 class="title">Built lately</h2>
-      <p class="mono">{{ projects.length }} projects &middot; 2026</p>
+      <p class="mono">{{ projects.length }} projects &middot; 2025 &ndash; 2026</p>
     </div>
 
     <div class="grid">
-      <article *ngFor="let p of projects" class="card reveal" [id]="p.id" [ngClass]="'card--' + p.span">
+      <article *ngFor="let p of projects" class="card reveal" [id]="p.id" [ngClass]="'card--' + p.span" [class.card--tall]="p.tall">
         <ng-container [ngSwitch]="p.media">
           <div *ngSwitchCase="'film'" class="card__media">
             <video
@@ -92,6 +92,46 @@
             <span class="alert__note mono">sample alert</span>
           </div>
 
+          <div *ngSwitchCase="'redacted'" class="card__media vault" role="img" aria-label="AI Stock Agent, live in production, source private. Pipeline: market data ingestion, multi-agent analysis, validated and explainable decisions, live execution; how each stage works is redacted. A sample decision with its symbol, action and rationale redacted, marked validated. An evaluation harness benchmarks four frontier models on identical inputs.">
+            <div class="vault__top">
+              <p class="mono mono--caps">source private</p>
+              <p class="vault__live mono"><span class="vault__pulse" aria-hidden="true"></span>live in production</p>
+            </div>
+
+            <div class="vault__main">
+              <ol class="vault__flow">
+                <li *ngFor="let stage of pipeline; let i = index; let last = last" class="vault__step">
+                  <span class="vault__node" [class.vault__node--live]="last" aria-hidden="true"></span>
+                  <span class="mono">0{{ i + 1 }}</span>
+                  <span class="vault__stage">{{ stage }}</span>
+                  <span class="ink vault__ink" aria-hidden="true"></span>
+                </li>
+              </ol>
+
+              <div class="vault__side">
+                <div class="decision" aria-hidden="true">
+                  <p class="decision__head mono"><span>sample decision</span><span>redacted</span></p>
+                  <dl class="decision__fields">
+                    <div><dt class="mono">symbol</dt><dd><span class="ink ink--s"></span></dd></div>
+                    <div><dt class="mono">action</dt><dd><span class="ink ink--s"></span></dd></div>
+                    <div>
+                      <dt class="mono">rationale</dt>
+                      <dd class="decision__why"><span class="ink"></span><span class="ink"></span><span class="ink ink--m"></span></dd>
+                    </div>
+                  </dl>
+                  <p class="decision__ok mono">&check; validated &middot; explainable</p>
+                </div>
+
+                <div class="harness">
+                  <p class="mono">evaluation harness &middot; identical inputs</p>
+                  <ul class="harness__models">
+                    <li *ngFor="let model of benchModels" class="mono">{{ model }}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <a *ngSwitchDefault class="card__media" [href]="p.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Open ' + p.name">
             <img [src]="p.image" [alt]="p.imageAlt" width="800" height="500" loading="lazy" decoding="async">
           </a>
@@ -103,9 +143,12 @@
             <h3 class="card__name">{{ p.name }}</h3>
             <p class="card__line">{{ p.line }}</p>
           </div>
-          <a class="card__arrow" [href]="p.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="p.name + ' on GitHub'">
+          <a *ngIf="p.url; else walkthrough" class="card__arrow" [href]="p.url" target="_blank" rel="noopener noreferrer" [attr.aria-label]="p.name + ' on GitHub'">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 17 17 7M9 7h8v8"/></svg>
           </a>
+          <ng-template #walkthrough>
+            <a class="btn btn--line card__ask" [href]="walkthroughHref">Ask for a walkthrough</a>
+          </ng-template>
         </div>
       </article>
     </div>

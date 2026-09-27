@@ -82,7 +82,7 @@ button { font: inherit; }
 
 // ===== Proof strip =====
 .proof {
-  margin: 0 $gutter; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 $gutter; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid $line; border-bottom: 1px solid $line;
 }
 .proof__item {
@@ -92,7 +92,11 @@ button { font: inherit; }
   &:last-child { padding-right: 0; border-right: none; }
   &:hover .proof__value { color: $accent; }
 }
-.proof__value { @include display; display: inline-flex; align-items: center; gap: 12px; white-space: nowrap; font-size: 2.75rem; line-height: 1; letter-spacing: -0.03em; transition: color 0.2s; }
+.proof__value {
+  @include display; display: inline-flex; align-items: center; gap: 12px; white-space: nowrap;
+  font-size: clamp(2.25rem, 3vw, 2.75rem); line-height: 1; letter-spacing: -0.03em; transition: color 0.2s;
+  .chip__dot { width: 12px; height: 12px; }
+}
 .proof__label { font-size: 15px; color: $text-3; }
 
 // ===== Work =====
@@ -103,9 +107,12 @@ button { font: inherit; }
 .card {
   padding: 12px; border-radius: 28px; background: $surface; border: 1px solid #26272b;
   display: flex; flex-direction: column; scroll-margin-top: 24px;
-  &--6 { grid-column: span 6; }
-  &--12 { grid-column: span 12; }
-  &--12 .card__media { height: 560px; }
+  &--4 { grid-column: span 4; }
+  &--8 { grid-column: span 8; }
+  // Both rows: the media grows to fill, the copy stacks above its button
+  &--tall { grid-row: span 2; }
+  &--tall .card__media { height: auto; flex: 1 1 auto; }
+  &--tall .card__body { flex-grow: 0; flex-direction: column; align-items: flex-start; }
 }
 .card__media {
   position: relative; display: block; height: 440px; border-radius: 18px; overflow: hidden; background: #0d0d0e;
@@ -142,6 +149,65 @@ button { font: inherit; }
 .alert__text { padding: 8px 12px 10px; }
 .alert__meta { font-style: italic; color: #6f6c66; }
 .alert__note { position: absolute; right: 16px; top: 16px; z-index: 1; padding: 4px 10px; border-radius: 999px; background: rgba($ground, 0.85); font-size: 11px; }
+
+// ===== AI Stock Agent: an ops console. The stages are named, the how is inked out =====
+.ink { display: block; height: 10px; border-radius: 3px; background: #0d0d0e; }
+.ink--s { width: 56px; }
+.ink--m { width: 60%; }
+
+.vault { background: $raised; padding: 28px; display: flex; flex-direction: column; gap: 36px; }
+.vault__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.vault__live { display: inline-flex; align-items: center; gap: 10px; color: $text-2; }
+.vault__pulse {
+  position: relative; width: 8px; height: 8px; border-radius: 50%; background: $live;
+  &::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 1px solid $live; animation: ring 2.4s ease-out infinite; }
+}
+.vault__main { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; }
+
+// A rail through the four stages, with a signal running down it
+.vault__flow {
+  position: relative; list-style: none; display: flex; flex-direction: column; gap: 28px; padding-left: 30px;
+  &::before, &::after { content: ''; position: absolute; left: 5px; top: 6px; width: 2px; }
+  &::before { bottom: 6px; background: $line-2; }
+  &::after { height: 25%; border-radius: 1px; background: linear-gradient(transparent, $accent); animation: signal 3.2s linear infinite; }
+}
+.vault__step { position: relative; display: flex; flex-direction: column; gap: 6px; }
+.vault__node {
+  position: absolute; left: -30px; top: 2px; width: 12px; height: 12px; border-radius: 50%;
+  background: $raised; border: 2px solid $line-2;
+  &--live { background: $live; border-color: $live; }
+}
+.vault__stage { @include display; font-size: 1.75rem; line-height: 1.05; }
+.vault__ink { margin-top: 4px; }
+.vault__step:nth-child(1) .vault__ink { width: 70%; }
+.vault__step:nth-child(2) .vault__ink { width: 52%; }
+.vault__step:nth-child(3) .vault__ink { width: 84%; }
+.vault__step:nth-child(4) .vault__ink { width: 40%; }
+
+.vault__side { display: flex; flex-direction: column; gap: 28px; }
+.decision { padding: 18px; border-radius: 14px; background: $surface; border: 1px solid $line; display: flex; flex-direction: column; gap: 16px; }
+.decision__head { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; span:last-child { color: $accent; } }
+.decision__fields {
+  display: flex; flex-direction: column; gap: 12px;
+  div { display: grid; grid-template-columns: 9ch minmax(0, 1fr); align-items: start; gap: 12px; }
+  dt { font-size: 12px; line-height: 16px; }
+  .ink { margin-top: 3px; }
+}
+.decision__why { display: flex; flex-direction: column; gap: 3px; }
+.decision__ok { font-size: 12px; color: $live; }
+.harness { display: flex; flex-direction: column; gap: 12px; }
+.harness__models {
+  list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
+  li { padding: 9px 10px; border-radius: 10px; border: 1px solid $line-2; font-size: 12px; color: $text-2; text-align: center; }
+}
+.card__ask { flex: none; }
+
+@keyframes ring { from { transform: scale(1); opacity: 0.9; } to { transform: scale(3); opacity: 0; } }
+@keyframes signal {
+  0% { transform: translateY(0); opacity: 0; }
+  12%, 88% { opacity: 1; }
+  100% { transform: translateY(300%); opacity: 0; }
+}
 
 // ===== About =====
 .about {
@@ -191,6 +257,18 @@ button { font: inherit; }
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .card__media > img { transition: none; }
+  .vault__pulse::after { animation: none; }
+  .vault__flow::after { display: none; }
+}
+
+// ===== Narrow desktop: too tight for the bento. Film, then AI Stock Agent, then the pair =====
+@media (max-width: 1280px) {
+  .card--8, .card--tall { grid-column: span 12; }
+  .card--tall { grid-row: auto; }
+  .card--4 { grid-column: span 6; }
+  .card--8 .card__media { height: 560px; }
+  .card--tall .card__body { flex-direction: row; align-items: flex-end; }
+  .vault__main { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; align-items: start; }
 }
 
 // ===== Tablet =====
@@ -200,12 +278,17 @@ button { font: inherit; }
   .hero { padding: 0 $g; min-height: 600px; }
   .hero__copy { grid-column: 1 / span 8; }
   .hero__portrait { right: 0; width: min(480px, 50vw); }
-  .proof { margin: 0 $g; }
-  .proof__item { padding: 24px 20px; }
+  .proof { margin: 0 $g; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .proof__item {
+    padding: 24px 20px;
+    &:nth-child(odd) { padding-left: 0; }
+    &:nth-child(even) { padding-right: 0; border-right: none; }
+    &:nth-child(-n + 2) { border-bottom: 1px solid $line; }
+  }
   .proof__value { font-size: 2.25rem; }
   .work { padding: 104px $g 96px; }
   .card__media { height: 360px; }
-  .card--12 .card__media { height: 440px; }
+  .card--8 .card__media { height: 440px; }
   .about { margin: 0 $g; .title { grid-column: span 12; margin-bottom: 32px; } }
   .about__body { grid-column: span 12; }
 }
@@ -232,16 +315,20 @@ button { font: inherit; }
   .work { padding: 64px $g 56px; gap: 24px; }
   .title { font-size: 2.5rem; }
   .grid { gap: 16px; }
-  .card--6, .card--12 { grid-column: span 12; }
+  .card--4, .card--8 { grid-column: span 12; }
   .card { padding: 8px; border-radius: 22px; }
-  .card__media, .card--12 .card__media { height: 220px; border-radius: 15px; }
-  .card__body { padding: 16px 10px 10px; flex-direction: column; align-items: stretch; gap: 16px; }
+  .card__media, .card--8 .card__media { height: 220px; border-radius: 15px; }
+  .card__body, .card--tall .card__body { padding: 16px 10px 10px; flex-direction: column; align-items: stretch; gap: 16px; }
   .card__name { font-size: 1.625rem; }
   .card__line { font-size: 1rem; }
   .card__arrow { align-self: flex-start; }
   .chart { padding: 20px; height: auto; min-height: 220px; gap: 14px; }
   .chart__big { font-size: 4.75rem; }
   .alert__phone { transform: scale(0.72); transform-origin: top center; top: 20px; }
+  .vault { padding: 20px; gap: 28px; }
+  .vault__main { display: flex; gap: 32px; }
+  .vault__stage { font-size: 1.375rem; }
+  .card__ask { align-self: flex-start; }
   .about { margin: 0 $g; padding: 56px 0 72px; }
   .about__text { font-size: 1.25rem; }
   .facts { grid-template-columns: minmax(0, 1fr); row-gap: 16px; }

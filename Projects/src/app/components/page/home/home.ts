@@ -5,9 +5,11 @@ interface Proof {
   value: string;
   label: string;
   target: string;
+  /** Leads the value with the green live dot. */
+  live?: boolean;
 }
 
-type Media = 'film' | 'chart' | 'alert' | 'still';
+type Media = 'film' | 'chart' | 'alert' | 'redacted' | 'still';
 
 interface Project {
   id: string;
@@ -16,14 +18,19 @@ interface Project {
   tag: string;
   line: string;
   media: Media;
-  /** Columns out of 12 on desktop: the film runs full width, the other two share a row. */
-  span: 6 | 12;
+  /**
+   * Columns out of 12 on wide screens. A bento: the film (8) and the tall AI Stock Agent
+   * (4, both rows) side by side, the other two (4 + 4) under the film.
+   */
+  span: 4 | 8;
+  /** Spans both grid rows. */
+  tall?: boolean;
   image?: string;
   imageAlt?: string;
   video?: string;
   videoLabel?: string;
-  /** The code, on GitHub. */
-  url: string;
+  /** The code, on GitHub. Absent for a private repo: the card offers a walkthrough instead. */
+  url?: string;
 }
 
 interface TokenBar {
@@ -58,6 +65,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   /** One number per project, closing the first screen: the whole portfolio in two seconds. */
   readonly proof: Proof[] = [
     { value: '58.6 s', label: 'Record lap · Driving RL', target: 'driving-rl' },
+    { value: 'Live', label: 'Autonomous trading, in production · AI Stock Agent', target: 'ai-stock-agent', live: true },
     { value: '−52%', label: 'Tokens per run, long agents · Lean-Swarm', target: 'lean-swarm' },
     { value: '<100 / day', label: 'LLM calls, down from 2,900 · ApartmentBot', target: 'apartmentbot' }
   ];
@@ -73,7 +81,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       tag: 'Reinforcement learning',
       line: 'A car that taught itself a stunt circuit in 107 minutes, on a laptop.',
       media: 'film',
-      span: 12,
+      span: 8,
       image: 'assets/images/DrivingRL.webp',
       imageAlt: 'The trained car mid-lap on the stunt circuit',
       video: 'assets/video/driving-rl.mp4',
@@ -81,12 +89,21 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       url: 'https://github.com/itayco2/driving-rl'
     },
     {
+      id: 'ai-stock-agent',
+      name: 'AI Stock Agent',
+      tag: 'Production AI, end to end',
+      line: 'An autonomous AI trading platform, built alone from market data to live execution.',
+      media: 'redacted',
+      span: 4,
+      tall: true
+    },
+    {
       id: 'lean-swarm',
       name: 'Lean-Swarm',
       tag: 'Agents & evals',
       line: 'Multi-agent runs that read half the tokens, cost 38% less and still catch every bug.',
       media: 'chart',
-      span: 6,
+      span: 4,
       url: 'https://github.com/itayco2/Lean-Swarm'
     },
     {
@@ -95,7 +112,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       tag: 'LLM in production',
       line: 'Every Israeli rental site in one Telegram alert, on under 100 LLM calls a day.',
       media: 'alert',
-      span: 6,
+      span: 4,
       url: 'https://github.com/itayco2/ApartmentBot'
     }
   ];
@@ -108,6 +125,19 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     { label: 'default agents', value: 6.61 },
     { label: 'lean roles', value: 3.19, lean: true }
   ];
+
+  /**
+   * AI Stock Agent is private: the stages are named, how each one works is not.
+   * Only what the résumé already says.
+   */
+  readonly pipeline: string[] = [
+    'Market data ingestion',
+    'Multi-agent analysis',
+    'Validated, explainable decisions',
+    'Live execution'
+  ];
+  readonly benchModels: string[] = ['Claude Fable', 'Claude Opus', 'Gemini', 'ChatGPT'];
+  readonly walkthroughHref = `mailto:${this.email}?subject=${encodeURIComponent('AI Stock Agent walkthrough')}`;
 
   readonly facts: Fact[] = [
     { label: 'Now', value: 'AB Solutions, Prism AI' },
