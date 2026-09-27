@@ -68,7 +68,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     { value: 'Live', label: 'Autonomous trading, in production · AI Stock Agent', target: 'ai-stock-agent', live: true },
     { value: '−52%', label: 'Tokens per run, long agents · Lean-Swarm', target: 'lean-swarm' },
     { value: '<100 / day', label: 'LLM calls, down from 2,900 · ApartmentBot', target: 'apartmentbot' },
-    { value: '90.2%', label: 'DeepMind chess puzzles, no search · Blink', target: 'blink' }
+    { value: '89.8%', label: 'DeepMind's 10,000 chess puzzles, no search · Blink', target: 'blink' }
   ];
 
   /**
@@ -143,10 +143,13 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     -0.46, -0.22, -0.3, 0.04, -0.09, 0.06, -0.29, -0.17, -0.24, -0.4, -0.12, -0.15, 0.1, -0.17, -0.11, -0.32
   ];
   readonly blinkCells: string[] = this.boardCells();
-  /** Share of the first 2,000 DeepMind puzzles solved, both models on the same puzzles. */
+  /**
+   * Share of DeepMind's full 10,000-puzzle set solved, both models measured here on the same puzzles.
+   * DeepMind 9M is its EMA weights, the better of its two released sets (86.4%; 86.2% for the other).
+   */
   readonly blinkBars: TokenBar[] = [
-    { label: 'Blink · 22.5M parameters · one home GPU', value: 90.2, lean: true },
-    { label: 'DeepMind 9M', value: 86.6 }
+    { label: 'Blink · 22.5M parameters · one home GPU', value: 89.8, lean: true },
+    { label: 'DeepMind 9M', value: 86.4 }
   ];
 
   readonly tokenBars: TokenBar[] = [
