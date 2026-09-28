@@ -144,12 +144,13 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   ];
   readonly blinkCells: string[] = this.boardCells();
   /**
-   * Share of DeepMind's full 10,000-puzzle set solved, both models measured here on the same puzzles.
-   * DeepMind 9M is its EMA weights, the better of its two released sets (86.4%; 86.2% for the other).
+   * Share of Google DeepMind's full 10,000-puzzle set solved. Google DeepMind 9M is the paper's own figure
+   * (88.9%, arXiv 2402.04494 v2, after 10M training steps). Its released checkpoint is from step 6.4M and,
+   * re-measured with Blink's scorer on the same puzzles, solves 86.4%; the chart uses the stronger number.
    */
   readonly blinkBars: TokenBar[] = [
     { label: 'Blink · 22.5M parameters · one home GPU', value: 89.8, lean: true },
-    { label: 'Google DeepMind 9M', value: 86.4 }
+    { label: 'Google DeepMind 9M · as published', value: 88.9 }
   ];
 
   readonly tokenBars: TokenBar[] = [
