@@ -56,7 +56,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   readonly github = 'https://github.com/itayco2';
   readonly linkedin = 'https://www.linkedin.com/in/itay-cohen-941552349/';
 
-  // Résumé download — set to true after dropping the PDF at public/assets/Itay-Cohen-CV.pdf
+  // Résumé download: set to true after dropping the PDF at public/assets/Itay-Cohen-CV.pdf
   readonly hasCv = false;
   readonly cvPath = 'assets/Itay-Cohen-CV.pdf';
 
@@ -128,7 +128,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   ];
 
   /**
-   * Lean-Swarm v0.2 on long review agents (15–27 turns, 15,000-line codebase):
+   * Lean-Swarm v0.2 on long review agents (15 to 27 turns, 15,000-line codebase):
    * tokens read per run, in millions. The repo's headline result, not its best round.
    */
   /**
@@ -183,7 +183,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   private videoObserver?: IntersectionObserver;
 
   /**
-   * In-page links (#work, #about, …): with <base href="/"> the browser resolves "#work" to "/#work",
+   * In-page links (#work, #about and the others): with <base href="/"> the browser resolves "#work" to "/#work",
    * a different URL than /home, and reloads the page at the top. So the page scrolls itself.
    */
   private readonly onAnchorClick = (event: MouseEvent): void => {
@@ -248,7 +248,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         setTimeout(() => (this.showCookieBanner = true), 800);
       }
     } catch {
-      // Privacy mode / storage disabled — assume decline, no banner
+      // Privacy mode or storage disabled: assume decline, no banner
     }
 
     this.zone.runOutsideAngular(() => {
@@ -294,7 +294,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     try {
       localStorage.setItem(this.cookieKey, accepted ? 'accepted' : 'declined');
     } catch {
-      // Storage unavailable — banner just dismisses for this session
+      // Storage unavailable: the banner just dismisses for this session
     }
     this.showCookieBanner = false;
   }
